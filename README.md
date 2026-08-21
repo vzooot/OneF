@@ -13,6 +13,13 @@ Built entirely with SwiftUI and SceneKit — no dependencies, no packages, just 
 
 ## Features
 
+### 📱 Lock Screen & Home Screen widgets
+- **Lock Screen widgets** (inline, circular, rectangular) and small/medium Home Screen widgets counting down to the next session — the countdown text updates itself, no app launch needed
+- Widgets flip to a **LIVE** state during sessions and back automatically
+
+### 🔴 Live awareness
+- When a session is on track, the app's first screen shows an unmissable pulsing **LIVE NOW** banner, the countdown card auto-selects the live session, and the timetable row gets a live indicator
+
 ### ⏱️ Countdown
 - **A countdown for every session** — tap any chip (FP1, Sprint Quali, Sprint, Qualifying, Race) to target it; defaults to the next session that hasn't started, with live and complete states
 - **Start-light gantry** that progressively lights up through race week — all five burn in the final 24 hours

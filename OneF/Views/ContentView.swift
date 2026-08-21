@@ -33,6 +33,8 @@ struct ContentView: View {
                 HeaderView()
 
                 if let race = model.nextRace {
+                    LiveSessionBanner(race: race)
+
                     RaceHeroView(race: race)
 
                     CountdownView(sessions: race.sessions)
@@ -170,6 +172,60 @@ struct SeasonOverBanner: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
         .background(Theme.card, in: RoundedRectangle(cornerRadius: 18))
+    }
+}
+
+/// Impossible-to-miss banner shown at the very top while a session is on track.
+struct LiveSessionBanner: View {
+    let race: Race
+
+    @State private var pulse = false
+
+    var body: some View {
+        TimelineView(.periodic(from: .now, by: 30)) { context in
+            let now = context.date
+            let live = race.sessions.first {
+                $0.date <= now && now < $0.date.addingTimeInterval($0.kind.expectedDuration)
+            }
+
+            if let live {
+                HStack(spacing: 12) {
+                    Circle()
+                        .fill(.white)
+                        .frame(width: 12, height: 12)
+                        .shadow(color: .white, radius: pulse ? 10 : 2)
+                        .scaleEffect(pulse ? 1.25 : 0.85)
+                        .animation(.easeInOut(duration: 0.7).repeatForever(autoreverses: true), value: pulse)
+
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("\(live.kind.rawValue.uppercased()) · LIVE NOW")
+                            .font(.f1(20).italic())
+                            .foregroundStyle(.white)
+                        Text("\(Flags.emoji(for: race.circuit.location.country)) \(race.raceName)")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(.white.opacity(0.85))
+                    }
+
+                    Spacer()
+
+                    Text("🏁")
+                        .font(.system(size: 24))
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 13)
+                .background(
+                    RoundedRectangle(cornerRadius: 18)
+                        .fill(
+                            LinearGradient(
+                                colors: [Theme.f1Red, Color(red: 0.6, green: 0.0, blue: 0.05)],
+                                startPoint: .leading, endPoint: .trailing
+                            )
+                        )
+                        .shadow(color: Theme.f1Red.opacity(0.55), radius: 18, y: 4)
+                )
+                .onAppear { pulse = true }
+            }
+        }
     }
 }
 

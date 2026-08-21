@@ -11,6 +11,12 @@ struct CountdownView: View {
         if let selectedId, let chosen = sessions.first(where: { $0.id == selectedId }) {
             return chosen
         }
+        // Default to whatever is on track right now, then the next session.
+        if let live = sessions.first(where: {
+            $0.date <= now && now < $0.date.addingTimeInterval($0.kind.expectedDuration)
+        }) {
+            return live
+        }
         return sessions.first(where: { $0.date > now }) ?? sessions.last
     }
 

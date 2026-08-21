@@ -15,10 +15,10 @@ struct RootView: View {
         TabView {
             ContentView()
                 .tabItem { Label("Countdown", systemImage: "flag.checkered") }
-                .tag(0)
+            ResultsView()
+                .tabItem { Label("Results", systemImage: "trophy.fill") }
             NewsView()
                 .tabItem { Label("News", systemImage: "newspaper.fill") }
-                .tag(1)
         }
         .tint(Theme.f1Red)
     }

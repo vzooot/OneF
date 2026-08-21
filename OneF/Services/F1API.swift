@@ -44,4 +44,20 @@ enum F1API {
         try await fetch("current/driverstandings.json", query: [URLQueryItem(name: "limit", value: "\(limit)")])
             .standingsTable?.standingsLists.first?.driverStandings ?? []
     }
+
+    /// Constructors' championship top order.
+    static func constructorStandings(limit: Int = 5) async throws -> [ConstructorStanding] {
+        try await fetch("current/constructorstandings.json", query: [URLQueryItem(name: "limit", value: "\(limit)")])
+            .standingsTable?.standingsLists.first?.constructorStandings ?? []
+    }
+
+    /// The most recent completed grand prix, with full classification.
+    static func lastRaceResults() async throws -> Race? {
+        try await fetch("current/last/results.json").raceTable?.races.first
+    }
+
+    /// Qualifying classification for the most recent completed grand prix.
+    static func lastQualifying() async throws -> Race? {
+        try await fetch("current/last/qualifying.json").raceTable?.races.first
+    }
 }

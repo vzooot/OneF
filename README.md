@@ -1,13 +1,14 @@
 # OneF 🏎️
 
-**A fast, F1-broadcast-inspired iOS app: countdowns to every session of the next Grand Prix, an interactive 3D circuit map, and live paddock news.**
+**A fast, F1-broadcast-inspired iOS app: countdowns to every session of the next Grand Prix, an interactive 3D circuit map, full race results, and live paddock news.**
 
 Built entirely with SwiftUI and SceneKit — no dependencies, no packages, just one clean target.
 
 <p align="center">
-  <img src="Docs/screenshot-hero.png" width="260" alt="Session countdowns" />
-  <img src="Docs/screenshot-track.png" width="260" alt="Interactive 3D circuit map" />
-  <img src="Docs/screenshot-news.png" width="260" alt="Paddock news" />
+  <img src="Docs/screenshot-hero.png" width="220" alt="Session countdowns" />
+  <img src="Docs/screenshot-track.png" width="220" alt="Interactive 3D circuit map" />
+  <img src="Docs/screenshot-results.png" width="220" alt="Race results" />
+  <img src="Docs/screenshot-news.png" width="220" alt="Paddock news" />
 </p>
 
 ## Features
@@ -24,6 +25,11 @@ Built entirely with SwiftUI and SceneKit — no dependencies, no packages, just 
 - **Auto-rotates** — drag to orbit, pinch to zoom
 - Stats derived from the actual geometry: **track length**, **corner count**, **direction of travel**, and **pit-lane time loss**
 
+### 🏆 Results
+- **Last Grand Prix classification** with a podium visualization, gaps, points, fastest-lap highlight, and grid-delta arrows showing positions gained or lost
+- **Qualifying mode** with each driver's best time and the segment it came from (Q1/Q2/Q3)
+- **Constructors' championship top 5**
+
 ### 📰 Paddock News
 - Latest F1 stories aggregated from **Formula1.com, BBC Sport, and Motorsport.com** RSS feeds — merged, deduplicated, sorted newest-first, with thumbnails
 - No API keys, no accounts
@@ -32,7 +38,7 @@ Built entirely with SwiftUI and SceneKit — no dependencies, no packages, just 
 
 | Source | Used for |
 |---|---|
-| [Jolpica F1 API](https://github.com/jolpica/jolpica-f1) | Race calendar, session times, standings |
+| [Jolpica F1 API](https://github.com/jolpica/jolpica-f1) | Race calendar, session times, standings, results, qualifying |
 | [MultiViewer circuits API](https://api.multiviewer.app) | Track centerline geometry, corners, pit loss |
 | F1.com / BBC / Motorsport.com RSS | News stories |
 
@@ -54,6 +60,7 @@ OneF/
 │   └── NewsService.swift           # concurrent RSS aggregation + parser
 ├── ViewModels/
 │   ├── RaceViewModel.swift         # @Observable, async-let fan-out
+│   ├── ResultsViewModel.swift
 │   └── NewsViewModel.swift
 └── Views/
     ├── ContentView.swift           # countdown tab layout
@@ -64,6 +71,7 @@ OneF/
     ├── TrackSectionView.swift
     ├── StandingsView.swift
     ├── SeasonView.swift
+    ├── ResultsView.swift           # podium, classifications, constructors
     └── NewsView.swift
 ```
 
@@ -81,7 +89,7 @@ OneF/
 
 ## Roadmap ideas
 
-The Jolpica API also serves race results, qualifying classifications, lap times, and pit stops — natural material for a results tab after each Grand Prix.
+The Jolpica API also serves lap-by-lap times and pit stop data — material for race strategy visualizations (stint charts, position graphs) down the road.
 
 ## License
 

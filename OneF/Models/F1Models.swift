@@ -40,11 +40,13 @@ struct StandingsTable: Decodable {
 
 struct StandingsList: Decodable {
     let round: String?
-    let driverStandings: [DriverStanding]
+    let driverStandings: [DriverStanding]?
+    let constructorStandings: [ConstructorStanding]?
 
     enum CodingKeys: String, CodingKey {
         case round
         case driverStandings = "DriverStandings"
+        case constructorStandings = "ConstructorStandings"
     }
 }
 
@@ -63,6 +65,9 @@ struct Race: Decodable, Identifiable, Equatable {
     let qualifying: SessionTime?
     let sprint: SessionTime?
     let sprintQualifying: SessionTime?
+    /// Present only on the results/qualifying endpoints.
+    let results: [RaceResult]?
+    let qualifyingResults: [QualifyingResult]?
 
     enum CodingKeys: String, CodingKey {
         case season, round, raceName, date, time
@@ -73,6 +78,8 @@ struct Race: Decodable, Identifiable, Equatable {
         case qualifying = "Qualifying"
         case sprint = "Sprint"
         case sprintQualifying = "SprintQualifying"
+        case results = "Results"
+        case qualifyingResults = "QualifyingResults"
     }
 
     var id: String { "\(season)-\(round)" }
@@ -199,6 +206,109 @@ struct Driver: Decodable {
 struct Constructor: Decodable {
     let constructorId: String
     let name: String
+}
+
+struct ConstructorStanding: Decodable, Identifiable {
+    let position: String
+    let points: String
+    let wins: String
+    let constructor: Constructor
+
+    enum CodingKeys: String, CodingKey {
+        case position, points, wins
+        case constructor = "Constructor"
+    }
+
+    var id: String { constructor.constructorId }
+}
+
+// MARK: - Race & qualifying results
+
+struct RaceResult: Decodable, Identifiable {
+    let position: String
+    let positionText: String
+    let points: String
+    let driver: Driver
+    let constructor: Constructor
+    let grid: String
+    let laps: String?
+    let status: String
+    let time: ResultTime?
+    let fastestLap: FastestLap?
+
+    enum CodingKeys: String, CodingKey {
+        case position, positionText, points, grid, laps, status
+        case driver = "Driver"
+        case constructor = "Constructor"
+        case time = "Time"
+        case fastestLap = "FastestLap"
+    }
+
+    var id: String { driver.driverId }
+
+    /// Positions gained (+) or lost (−) versus the starting grid.
+    /// Nil for pit-lane starts (grid "0").
+    var gridDelta: Int? {
+        guard let start = Int(grid), start > 0, let finish = Int(position) else { return nil }
+        return start - finish
+    }
+
+    /// Set the fastest lap of the race.
+    var hasFastestLap: Bool { fastestLap?.rank == "1" }
+
+    /// What to show in the gap column: winner's total, gap, or status (DNF etc).
+    var gapText: String {
+        if let t = time?.time { return t }
+        return status.uppercased()
+    }
+
+    /// Classified as a finisher — includes cars a lap (or more) down.
+    var finished: Bool {
+        status == "Finished" || status.hasPrefix("+") || status == "Lapped"
+    }
+}
+
+struct ResultTime: Decodable {
+    let time: String
+}
+
+struct FastestLap: Decodable {
+    let rank: String?
+    let lap: String?
+    let time: ResultTime?
+
+    enum CodingKeys: String, CodingKey {
+        case rank, lap
+        case time = "Time"
+    }
+}
+
+struct QualifyingResult: Decodable, Identifiable {
+    let position: String
+    let driver: Driver
+    let constructor: Constructor
+    let q1: String?
+    let q2: String?
+    let q3: String?
+
+    enum CodingKeys: String, CodingKey {
+        case position
+        case driver = "Driver"
+        case constructor = "Constructor"
+        case q1 = "Q1"
+        case q2 = "Q2"
+        case q3 = "Q3"
+    }
+
+    var id: String { driver.driverId }
+
+    /// Best time set, with the segment it came from.
+    var bestTime: (time: String, segment: String)? {
+        if let q3 { return (q3, "Q3") }
+        if let q2 { return (q2, "Q2") }
+        if let q1 { return (q1, "Q1") }
+        return nil
+    }
 }
 
 // MARK: - Date parsing

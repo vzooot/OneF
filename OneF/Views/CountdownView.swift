@@ -1,29 +1,53 @@
 import SwiftUI
 
-/// Live tick-by-tick countdown to lights out, with an F1 start gantry on top.
+/// Live tick-by-tick countdown with a selectable target: tap any session chip
+/// to count down to it. Defaults to the next session that hasn't started.
 struct CountdownView: View {
-    let target: Date
+    let sessions: [WeekendSession]
+
+    @State private var selectedId: String?
+
+    private func resolvedSelection(now: Date) -> WeekendSession? {
+        if let selectedId, let chosen = sessions.first(where: { $0.id == selectedId }) {
+            return chosen
+        }
+        return sessions.first(where: { $0.date > now }) ?? sessions.last
+    }
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 1)) { context in
-            let remaining = max(0, target.timeIntervalSince(context.date))
-            let parts = split(remaining)
+            let now = context.date
+            let session = resolvedSelection(now: now)
+            let target = session?.date ?? now
+            let remaining = target.timeIntervalSince(now)
 
-            VStack(spacing: 16) {
-                StartLightsView(secondsRemaining: remaining)
+            VStack(spacing: 14) {
+                sessionPicker(now: now, selected: session)
 
-                if remaining <= 0 {
-                    Text("IT'S LIGHTS OUT AND AWAY WE GO!")
-                        .font(.f1(22).italic())
-                        .foregroundStyle(Theme.f1Red)
-                        .frame(maxWidth: .infinity)
-                } else {
+                if let session {
+                    Text("\(session.kind.rawValue.uppercased()) · \(session.date.formatted(.dateTime.weekday(.wide).hour().minute()).uppercased())")
+                        .font(.f1(12, weight: .bold))
+                        .tracking(2)
+                        .foregroundStyle(Theme.dimText)
+                }
+
+                if remaining > 0 {
+                    StartLightsView(secondsRemaining: remaining)
+                    let parts = split(remaining)
                     HStack(spacing: 10) {
                         tile(parts.days, "DAYS")
                         tile(parts.hours, "HRS")
                         tile(parts.minutes, "MIN")
                         tile(parts.seconds, "SEC", hot: true)
                     }
+                } else if let session, now < session.date.addingTimeInterval(session.kind.expectedDuration) {
+                    liveBanner(session)
+                } else {
+                    Text("🏁 \(session?.kind.rawValue.uppercased() ?? "SESSION") COMPLETE")
+                        .font(.f1(20).italic())
+                        .foregroundStyle(Theme.dimText)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 18)
                 }
             }
             .padding(18)
@@ -37,6 +61,50 @@ struct CountdownView: View {
                     .shadow(color: Theme.f1Red.opacity(0.25), radius: 24, y: 6)
             )
         }
+    }
+
+    private func sessionPicker(now: Date, selected: WeekendSession?) -> some View {
+        HStack(spacing: 6) {
+            ForEach(sessions) { session in
+                let isSelected = session.id == selected?.id
+                Button {
+                    selectedId = session.id
+                } label: {
+                    Text(session.kind.short)
+                        .font(.f1(13).italic())
+                        .foregroundStyle(isSelected ? .white : Theme.dimText)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 7)
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(isSelected ? Theme.f1Red : Color.white.opacity(0.06))
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .strokeBorder(
+                                    isSelected ? .clear : (session.date <= now ? .clear : Theme.cardStroke),
+                                    lineWidth: 1
+                                )
+                        )
+                        .opacity(session.date <= now && !isSelected ? 0.45 : 1)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+
+    private func liveBanner(_ session: WeekendSession) -> some View {
+        HStack(spacing: 10) {
+            Circle()
+                .fill(Theme.f1Red)
+                .frame(width: 10, height: 10)
+                .shadow(color: Theme.f1Red, radius: 6)
+            Text("\(session.kind.rawValue.uppercased()) IS LIVE")
+                .font(.f1(22).italic())
+                .foregroundStyle(.white)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 18)
     }
 
     private func tile(_ value: Int, _ label: String, hot: Bool = false) -> some View {

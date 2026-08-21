@@ -35,11 +35,13 @@ struct ContentView: View {
                 if let race = model.nextRace {
                     RaceHeroView(race: race)
 
-                    if let start = race.startDate {
-                        CountdownView(target: start)
-                    }
+                    CountdownView(sessions: race.sessions)
 
                     WeekendScheduleView(race: race)
+
+                    if let map = model.trackMap {
+                        TrackSectionView(map: map, circuit: race.circuit)
+                    }
                 } else {
                     SeasonOverBanner()
                 }

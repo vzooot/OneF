@@ -1,50 +1,74 @@
 import SwiftUI
 
-/// Full race-weekend timetable in the viewer's local timezone.
+/// Full race-weekend timetable in the viewer's local timezone, with a live
+/// mini-countdown on every upcoming session.
 struct WeekendScheduleView: View {
     let race: Race
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            SectionTitle("RACE WEEKEND")
+        TimelineView(.periodic(from: .now, by: 30)) { context in
+            let now = context.date
+            let sessions = race.sessions
+            let nextId = sessions.first(where: { $0.date > now })?.id
 
-            VStack(spacing: 0) {
-                let sessions = race.sessions
-                let nextId = sessions.first(where: { $0.date > .now })?.id
+            VStack(alignment: .leading, spacing: 12) {
+                SectionTitle("RACE WEEKEND")
 
-                ForEach(sessions) { session in
-                    SessionRow(
-                        session: session,
-                        isPast: session.date <= .now,
-                        isNext: session.id == nextId
-                    )
-                    if session.id != sessions.last?.id {
-                        Divider().overlay(Color.white.opacity(0.06))
+                VStack(spacing: 0) {
+                    ForEach(sessions) { session in
+                        SessionRow(
+                            session: session,
+                            now: now,
+                            isNext: session.id == nextId
+                        )
+                        if session.id != sessions.last?.id {
+                            Divider().overlay(Color.white.opacity(0.06))
+                        }
                     }
                 }
-            }
-            .background(
-                RoundedRectangle(cornerRadius: 18)
-                    .fill(Theme.card)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 18)
-                            .strokeBorder(Theme.cardStroke, lineWidth: 1)
-                    )
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 18))
+                .background(
+                    RoundedRectangle(cornerRadius: 18)
+                        .fill(Theme.card)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 18)
+                                .strokeBorder(Theme.cardStroke, lineWidth: 1)
+                        )
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 18))
 
-            Text("All times local · \(TimeZone.current.identifier)")
-                .font(.caption2)
-                .foregroundStyle(Theme.faintText)
-                .padding(.leading, 4)
+                Text("All times local · \(TimeZone.current.identifier)")
+                    .font(.caption2)
+                    .foregroundStyle(Theme.faintText)
+                    .padding(.leading, 4)
+            }
         }
     }
 }
 
 struct SessionRow: View {
     let session: WeekendSession
-    let isPast: Bool
+    let now: Date
     let isNext: Bool
+
+    private var isLive: Bool {
+        session.date <= now && now < session.date.addingTimeInterval(session.kind.expectedDuration)
+    }
+
+    private var isPast: Bool {
+        !isLive && session.date <= now
+    }
+
+    /// e.g. "IN 2D 04H", "IN 3H 12M", "IN 42M"
+    private var miniCountdown: String? {
+        let seconds = Int(session.date.timeIntervalSince(now))
+        guard seconds > 0 else { return nil }
+        let d = seconds / 86400
+        let h = (seconds % 86400) / 3600
+        let m = (seconds % 3600) / 60
+        if d > 0 { return "IN \(d)D \(String(format: "%02d", h))H" }
+        if h > 0 { return "IN \(h)H \(String(format: "%02d", m))M" }
+        return "IN \(max(m, 1))M"
+    }
 
     var body: some View {
         HStack(spacing: 12) {
@@ -62,9 +86,20 @@ struct SessionRow: View {
                 .foregroundStyle(isPast ? Theme.faintText : .white)
                 .strikethrough(isPast, color: Theme.faintText)
 
-            if isNext {
-                Text("NEXT")
-                    .font(.f1(10, weight: .heavy))
+            if isLive {
+                HStack(spacing: 5) {
+                    Circle()
+                        .fill(Theme.f1Red)
+                        .frame(width: 7, height: 7)
+                        .shadow(color: Theme.f1Red, radius: 4)
+                    Text("LIVE")
+                        .font(.f1(10, weight: .heavy))
+                        .tracking(1)
+                        .foregroundStyle(Theme.f1Red)
+                }
+            } else if let countdown = miniCountdown, isNext {
+                Text(countdown)
+                    .font(.f1(10, weight: .heavy).monospacedDigit())
                     .tracking(1)
                     .foregroundStyle(Theme.f1Red)
                     .padding(.horizontal, 6)
@@ -73,6 +108,11 @@ struct SessionRow: View {
                         RoundedRectangle(cornerRadius: 5)
                             .strokeBorder(Theme.f1Red.opacity(0.6), lineWidth: 1)
                     )
+            } else if let countdown = miniCountdown {
+                Text(countdown)
+                    .font(.f1(10, weight: .heavy).monospacedDigit())
+                    .tracking(1)
+                    .foregroundStyle(Theme.dimText)
             }
 
             Spacer()

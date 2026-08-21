@@ -132,6 +132,14 @@ struct WeekendSession: Identifiable {
             case .race: "RACE"
             }
         }
+
+        /// Rough session length, used to decide when a session counts as live.
+        var expectedDuration: TimeInterval {
+            switch self {
+            case .race: 2 * 3600
+            default: 3600
+            }
+        }
     }
 
     let kind: Kind
@@ -142,10 +150,11 @@ struct WeekendSession: Identifiable {
 struct Circuit: Decodable {
     let circuitId: String
     let circuitName: String
+    let url: String?
     let location: CircuitLocation
 
     enum CodingKeys: String, CodingKey {
-        case circuitId, circuitName
+        case circuitId, circuitName, url
         case location = "Location"
     }
 }

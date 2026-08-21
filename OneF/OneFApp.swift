@@ -17,6 +17,8 @@ struct RootView: View {
                 .tabItem { Label("Countdown", systemImage: "flag.checkered") }
             ResultsView()
                 .tabItem { Label("Results", systemImage: "trophy.fill") }
+            StandingsTabView()
+                .tabItem { Label("Standings", systemImage: "list.number") }
             NewsView()
                 .tabItem { Label("News", systemImage: "newspaper.fill") }
         }

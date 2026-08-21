@@ -28,7 +28,9 @@ Built entirely with SwiftUI and SceneKit — no dependencies, no packages, just 
 ### 🏆 Results
 - **Last Grand Prix classification** with a podium visualization, gaps, points, fastest-lap highlight, and grid-delta arrows showing positions gained or lost
 - **Qualifying mode** with each driver's best time and the segment it came from (Q1/Q2/Q3)
-- **Constructors' championship top 5**
+
+### 🔢 Standings
+- **Complete championships** — every driver and every constructor, with car numbers, wins, points, and gap to the leader
 
 ### 📰 Paddock News
 - Latest F1 stories aggregated from **Formula1.com, BBC Sport, and Motorsport.com** RSS feeds — merged, deduplicated, sorted newest-first, with thumbnails
@@ -61,6 +63,7 @@ OneF/
 ├── ViewModels/
 │   ├── RaceViewModel.swift         # @Observable, async-let fan-out
 │   ├── ResultsViewModel.swift
+│   ├── StandingsViewModel.swift
 │   └── NewsViewModel.swift
 └── Views/
     ├── ContentView.swift           # countdown tab layout
@@ -72,6 +75,7 @@ OneF/
     ├── StandingsView.swift
     ├── SeasonView.swift
     ├── ResultsView.swift           # podium, classifications, constructors
+    ├── StandingsTabView.swift      # full drivers' and constructors' tables
     └── NewsView.swift
 ```
 

@@ -17,6 +17,9 @@ Built entirely with SwiftUI and SceneKit — no dependencies, no packages, just 
 - **Lock Screen widgets** (inline, circular, rectangular) and small/medium Home Screen widgets counting down to the next session — the countdown text updates itself, no app launch needed
 - Widgets flip to a **LIVE** state during sessions and back automatically
 
+### 📍 Live Activity (Dynamic Island)
+- **Pin any session** from the countdown card to get a Wolt-style Live Activity: a ticking countdown card on the Lock Screen and in the Dynamic Island, flipping to LIVE at green light
+
 ### 🔴 Live awareness
 - When a session is on track, the app's first screen shows an unmissable pulsing **LIVE NOW** banner, the countdown card auto-selects the live session, and the timetable row gets a live indicator
 

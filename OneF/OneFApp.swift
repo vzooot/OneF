@@ -11,6 +11,8 @@ struct OneFApp: App {
 }
 
 struct RootView: View {
+    @Environment(\.scenePhase) private var scenePhase
+
     var body: some View {
         TabView {
             ContentView()
@@ -23,5 +25,10 @@ struct RootView: View {
                 .tabItem { Label("News", systemImage: "newspaper.fill") }
         }
         .tint(Theme.f1Red)
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                LiveActivityManager.refresh()
+            }
+        }
     }
 }

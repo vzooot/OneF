@@ -3,9 +3,12 @@ import SwiftUI
 /// Live tick-by-tick countdown with a selectable target: tap any session chip
 /// to count down to it. Defaults to the next session that hasn't started.
 struct CountdownView: View {
-    let sessions: [WeekendSession]
+    let race: Race
 
     @State private var selectedId: String?
+    @State private var pinned = false
+
+    private var sessions: [WeekendSession] { race.sessions }
 
     private func resolvedSelection(now: Date) -> WeekendSession? {
         if let selectedId, let chosen = sessions.first(where: { $0.id == selectedId }) {
@@ -55,7 +58,12 @@ struct CountdownView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
                 }
+
+                if let session, session.date.addingTimeInterval(session.kind.expectedDuration) > now {
+                    pinButton(session: session)
+                }
             }
+            .onAppear { pinned = LiveActivityManager.isActive }
             .padding(18)
             .background(
                 RoundedRectangle(cornerRadius: 20)
@@ -67,6 +75,36 @@ struct CountdownView: View {
                     .shadow(color: Theme.f1Red.opacity(0.25), radius: 24, y: 6)
             )
         }
+    }
+
+    /// Starts/stops the Wolt-style Live Activity on the Lock Screen and in
+    /// the Dynamic Island.
+    private func pinButton(session: WeekendSession) -> some View {
+        Button {
+            if pinned {
+                LiveActivityManager.endAll()
+                pinned = false
+            } else {
+                LiveActivityManager.start(race: race, session: session)
+                pinned = true
+            }
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: pinned ? "pin.slash.fill" : "pin.fill")
+                    .font(.system(size: 11, weight: .bold))
+                Text(pinned ? "UNPIN FROM LOCK SCREEN" : "PIN \(session.kind.short) TO LOCK SCREEN")
+                    .font(.f1(12, weight: .bold))
+                    .tracking(1)
+            }
+            .foregroundStyle(pinned ? Theme.dimText : Theme.f1Red)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 9)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .strokeBorder(pinned ? Theme.cardStroke : Theme.f1Red.opacity(0.5), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
     }
 
     private func sessionPicker(now: Date, selected: WeekendSession?) -> some View {

@@ -37,7 +37,7 @@ struct ContentView: View {
 
                     RaceHeroView(race: race)
 
-                    CountdownView(sessions: race.sessions)
+                    CountdownView(race: race)
 
                     WeekendScheduleView(race: race)
 

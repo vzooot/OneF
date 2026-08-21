@@ -415,5 +415,6 @@ struct NextSessionWidget: Widget {
 struct OneFWidgetsBundle: WidgetBundle {
     var body: some Widget {
         NextSessionWidget()
+        RaceLiveActivity()
     }
 }

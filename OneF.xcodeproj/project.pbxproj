@@ -42,6 +42,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		AF0000012E0000010000F100 /* OneF */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = OneF; sourceTree = "<group>"; };
 		AF0000212E0000210000F200 /* OneFWidgets */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = OneFWidgets; sourceTree = "<group>"; };
+		AF0000302E0000300000F300 /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Shared; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +68,7 @@
 			children = (
 				AF0000012E0000010000F100 /* OneF */,
 				AF0000212E0000210000F200 /* OneFWidgets */,
+				AF0000302E0000300000F300 /* Shared */,
 				AF0000032E0000030000F100 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -99,6 +101,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				AF0000012E0000010000F100 /* OneF */,
+				AF0000302E0000300000F300 /* Shared */,
 			);
 			name = OneF;
 			packageProductDependencies = (
@@ -121,6 +124,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				AF0000212E0000210000F200 /* OneFWidgets */,
+				AF0000302E0000300000F300 /* Shared */,
 			);
 			name = OneFWidgetsExtension;
 			packageProductDependencies = (
@@ -130,14 +134,6 @@
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
-
-/* Begin PBXTargetDependency section */
-		AF00002C2E00002C0000F200 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = AF0000222E0000220000F200 /* OneFWidgetsExtension */;
-			targetProxy = AF00002B2E00002B0000F200 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXProject section */
 		AF00000A2E00000A0000F100 /* Project object */ = {
@@ -205,6 +201,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AF00002C2E00002C0000F200 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AF0000222E0000220000F200 /* OneFWidgetsExtension */;
+			targetProxy = AF00002B2E00002B0000F200 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		AF00000C2E00000C0000F100 /* Debug */ = {
@@ -275,6 +279,7 @@
 				DEVELOPMENT_TEAM = B637BE2R39;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -303,6 +308,7 @@
 				DEVELOPMENT_TEAM = B637BE2R39;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -321,8 +327,6 @@
 			};
 			name = Release;
 		};
-/* End XCBuildConfiguration section */
-
 		AF0000272E0000270000F200 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -371,17 +375,9 @@
 			};
 			name = Release;
 		};
+/* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AF0000262E0000260000F200 /* Build configuration list for PBXNativeTarget "OneFWidgetsExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				AF0000272E0000270000F200 /* Debug */,
-				AF0000282E0000280000F200 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		AF0000062E0000060000F100 /* Build configuration list for PBXNativeTarget "OneF" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -396,6 +392,15 @@
 			buildConfigurations = (
 				AF00000C2E00000C0000F100 /* Debug */,
 				AF00000D2E00000D0000F100 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AF0000262E0000260000F200 /* Build configuration list for PBXNativeTarget "OneFWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AF0000272E0000270000F200 /* Debug */,
+				AF0000282E0000280000F200 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

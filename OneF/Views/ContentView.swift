@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var model = RaceViewModel()
+    @State private var showAbout = false
 
     var body: some View {
         ZStack {
@@ -24,13 +25,20 @@ struct ContentView: View {
                 loadedContent
             }
         }
-        .task { await model.load() }
+        .task {
+            await model.load()
+            // Keep scheduled alerts in sync with any calendar changes.
+            await NotificationManager.reschedule(season: model.season)
+        }
+        .sheet(isPresented: $showAbout) {
+            AboutView()
+        }
     }
 
     private var loadedContent: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
-                HeaderView()
+                HeaderView(onInfo: { showAbout = true })
 
                 if let race = model.nextRace {
                     LiveSessionBanner(race: race)
@@ -40,6 +48,8 @@ struct ContentView: View {
                     CountdownView(race: race)
 
                     WeekendScheduleView(race: race)
+
+                    SessionAlertsCard(season: model.season)
 
                     if let map = model.trackMap {
                         TrackSectionView(map: map, circuit: race.circuit)
@@ -69,6 +79,8 @@ struct ContentView: View {
 // MARK: - Header
 
 struct HeaderView: View {
+    var onInfo: (() -> Void)? = nil
+
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             HStack(spacing: 10) {
@@ -83,6 +95,17 @@ struct HeaderView: View {
                         .foregroundStyle(Theme.f1Red)
                 }
                 .font(.f1(40).italic())
+
+                Spacer()
+
+                if let onInfo {
+                    Button(action: onInfo) {
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 20))
+                            .foregroundStyle(Theme.dimText)
+                    }
+                    .buttonStyle(.plain)
+                }
             }
             Text("NEXT RACE COUNTDOWN")
                 .font(.f1(13, weight: .semibold))
@@ -172,6 +195,56 @@ struct SeasonOverBanner: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
         .background(Theme.card, in: RoundedRectangle(cornerRadius: 18))
+    }
+}
+
+/// Toggle for on-device session alerts: one notification 15 minutes before
+/// every upcoming session of the season.
+struct SessionAlertsCard: View {
+    let season: [Race]
+
+    @State private var enabled = NotificationManager.isEnabled
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: enabled ? "bell.badge.fill" : "bell.slash")
+                .font(.system(size: 20))
+                .foregroundStyle(enabled ? Theme.f1Red : Theme.dimText)
+                .frame(width: 30)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text("SESSION ALERTS")
+                    .font(.f1(15).italic())
+                    .foregroundStyle(.white)
+                Text("Get notified 15 minutes before every session")
+                    .font(.system(size: 12))
+                    .foregroundStyle(Theme.dimText)
+            }
+
+            Spacer()
+
+            Toggle("", isOn: $enabled)
+                .labelsHidden()
+                .tint(Theme.f1Red)
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: 18)
+                .fill(Theme.card)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 18)
+                        .strokeBorder(Theme.cardStroke, lineWidth: 1)
+                )
+        )
+        .onChange(of: enabled) { old, wantsOn in
+            guard old != wantsOn else { return }
+            Task {
+                let result = await NotificationManager.setEnabled(wantsOn, season: season)
+                // Flips back if the user denied the permission prompt.
+                if result != wantsOn { enabled = result }
+            }
+        }
     }
 }
 

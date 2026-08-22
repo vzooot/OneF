@@ -20,6 +20,12 @@ Built entirely with SwiftUI and SceneKit — no dependencies, no packages, just 
 ### 📍 Live Activity (Dynamic Island)
 - **Pin any session** from the countdown card to get a Wolt-style Live Activity: a ticking countdown card on the Lock Screen and in the Dynamic Island, flipping to LIVE at green light
 
+### 🔔 Session alerts
+- Opt-in **local notifications 15 minutes before every session** of the season — scheduled fully on-device, no server, no account
+
+### ℹ️ About & legal
+- In-app About screen with the non-affiliation disclaimer, data accuracy notice, and source attributions (as required by the Jolpica CC BY-NC-SA license); privacy manifest included — the app collects no data
+
 ### 🔴 Live awareness
 - When a session is on track, the app's first screen shows an unmissable pulsing **LIVE NOW** banner, the countdown card auto-selects the live session, and the timetable row gets a live indicator
 - A broadcast-style **session clock with milliseconds** ticks in the banner and countdown card while a session runs

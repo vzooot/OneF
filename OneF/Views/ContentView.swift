@@ -208,8 +208,15 @@ struct LiveSessionBanner: View {
 
                     Spacer()
 
-                    Text("🏁")
-                        .font(.system(size: 24))
+                    VStack(alignment: .trailing, spacing: 1) {
+                        SessionClock(start: live.date)
+                            .font(.f1Digits(19))
+                            .foregroundStyle(.white)
+                        Text("SESSION TIME")
+                            .font(.system(size: 8, weight: .semibold))
+                            .tracking(1)
+                            .foregroundStyle(.white.opacity(0.7))
+                    }
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 13)

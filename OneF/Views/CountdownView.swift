@@ -138,17 +138,26 @@ struct CountdownView: View {
     }
 
     private func liveBanner(_ session: WeekendSession) -> some View {
-        HStack(spacing: 10) {
-            Circle()
-                .fill(Theme.f1Red)
-                .frame(width: 10, height: 10)
-                .shadow(color: Theme.f1Red, radius: 6)
-            Text("\(session.kind.rawValue.uppercased()) IS LIVE")
-                .font(.f1(22).italic())
-                .foregroundStyle(.white)
+        VStack(spacing: 8) {
+            HStack(spacing: 10) {
+                Circle()
+                    .fill(Theme.f1Red)
+                    .frame(width: 10, height: 10)
+                    .shadow(color: Theme.f1Red, radius: 6)
+                Text("\(session.kind.rawValue.uppercased()) IS LIVE")
+                    .font(.f1(22).italic())
+                    .foregroundStyle(.white)
+            }
+            SessionClock(start: session.date)
+                .font(.f1Digits(40))
+                .foregroundStyle(Theme.f1Red)
+            Text("SESSION TIME")
+                .font(.f1(10, weight: .bold))
+                .tracking(3)
+                .foregroundStyle(Theme.dimText)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 18)
+        .padding(.vertical, 14)
     }
 
     private func tile(_ value: Int, _ label: String, hot: Bool = false) -> some View {
@@ -178,6 +187,28 @@ struct CountdownView: View {
     private func split(_ interval: TimeInterval) -> (days: Int, hours: Int, minutes: Int, seconds: Int) {
         let total = Int(interval)
         return (total / 86400, (total % 86400) / 3600, (total % 3600) / 60, total % 60)
+    }
+}
+
+/// F1-broadcast style session clock: elapsed time since green light,
+/// ticking with milliseconds at display refresh rate.
+struct SessionClock: View {
+    let start: Date
+
+    var body: some View {
+        TimelineView(.animation) { context in
+            Text(Self.format(max(0, context.date.timeIntervalSince(start))))
+                .contentTransition(.identity)
+        }
+    }
+
+    static func format(_ elapsed: TimeInterval) -> String {
+        let totalMs = Int(elapsed * 1000)
+        let hours = totalMs / 3_600_000
+        let minutes = (totalMs % 3_600_000) / 60_000
+        let seconds = (totalMs % 60_000) / 1000
+        let millis = totalMs % 1000
+        return String(format: "%d:%02d:%02d.%03d", hours, minutes, seconds, millis)
     }
 }
 

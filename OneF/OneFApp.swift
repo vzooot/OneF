@@ -12,7 +12,6 @@ struct OneFApp: App {
 
 struct RootView: View {
     @Environment(\.scenePhase) private var scenePhase
-
     var body: some View {
         TabView {
             ContentView()

@@ -56,8 +56,13 @@ enum F1API {
         try await fetch("current/last/results.json").raceTable?.races.first
     }
 
-    /// Qualifying classification for the most recent completed grand prix.
-    static func lastQualifying() async throws -> Race? {
-        try await fetch("current/last/qualifying.json").raceTable?.races.first
+    /// Full classification for any completed round of the current season.
+    static func raceResults(round: String) async throws -> Race? {
+        try await fetch("current/\(round)/results.json").raceTable?.races.first
+    }
+
+    /// Qualifying classification for any round of the current season.
+    static func qualifying(round: String) async throws -> Race? {
+        try await fetch("current/\(round)/qualifying.json").raceTable?.races.first
     }
 }

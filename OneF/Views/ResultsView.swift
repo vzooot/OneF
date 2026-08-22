@@ -41,22 +41,35 @@ struct ResultsView: View {
                 if let race = model.raceWithResults, let results = race.results, !results.isEmpty {
                     header(race: race)
 
-                    PodiumView(results: results)
-
-                    modePicker
-
-                    if mode == .race {
-                        if let fastest = results.first(where: { $0.hasFastestLap }) {
-                            FastestLapCard(result: fastest)
-                        }
-                        RaceClassificationView(results: results)
-                    } else if let quali = model.raceWithQualifying?.qualifyingResults, !quali.isEmpty {
-                        QualifyingClassificationView(results: quali)
-                    } else {
-                        Text("No qualifying data yet.")
-                            .font(.subheadline)
-                            .foregroundStyle(Theme.dimText)
+                    if model.completedRaces.count > 1 {
+                        roundPicker
                     }
+
+                    Group {
+                        PodiumView(results: results)
+
+                        modePicker
+
+                        if mode == .race {
+                            if let fastest = results.first(where: { $0.hasFastestLap }) {
+                                FastestLapCard(result: fastest)
+                            }
+                            RaceClassificationView(results: results)
+                        } else if let quali = model.raceWithQualifying?.qualifyingResults, !quali.isEmpty {
+                            QualifyingClassificationView(results: quali)
+                        } else {
+                            Text("No qualifying data yet.")
+                                .font(.subheadline)
+                                .foregroundStyle(Theme.dimText)
+                        }
+                    }
+                    .opacity(model.isSwitching ? 0.35 : 1)
+                    .overlay {
+                        if model.isSwitching {
+                            ProgressView().tint(Theme.f1Red)
+                        }
+                    }
+                    .animation(.easeInOut(duration: 0.2), value: model.isSwitching)
                 } else {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("🏁 NO RESULTS YET")
@@ -90,6 +103,50 @@ struct ResultsView: View {
                 .foregroundStyle(Theme.dimText)
         }
         .padding(.top, 8)
+    }
+
+    /// Horizontal strip of every completed round; tap to load its results.
+    private var roundPicker: some View {
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(model.completedRaces) { race in
+                        let isSelected = race.round == model.selectedRound
+                        Button {
+                            Task { await model.select(round: race.round) }
+                        } label: {
+                            VStack(spacing: 2) {
+                                Text("\(Flags.emoji(for: race.circuit.location.country)) R\(race.roundNumber)")
+                                    .font(.f1(13).italic())
+                                    .foregroundStyle(isSelected ? Theme.f1Red : .white)
+                                Text(race.circuit.location.locality.uppercased())
+                                    .font(.f1(10, weight: .bold))
+                                    .foregroundStyle(isSelected ? .white : Theme.dimText)
+                                    .lineLimit(1)
+                            }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 7)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(isSelected ? Theme.f1Red.opacity(0.15) : Theme.card)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .strokeBorder(isSelected ? Theme.f1Red : Theme.cardStroke, lineWidth: isSelected ? 1.5 : 1)
+                                    )
+                            )
+                        }
+                        .buttonStyle(.plain)
+                        .id(race.round)
+                    }
+                }
+                .padding(.vertical, 2)
+            }
+            .onAppear {
+                if let selected = model.selectedRound {
+                    proxy.scrollTo(selected, anchor: .trailing)
+                }
+            }
+        }
     }
 
     private var modePicker: some View {

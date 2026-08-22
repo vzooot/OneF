@@ -22,6 +22,7 @@ Built entirely with SwiftUI and SceneKit — no dependencies, no packages, just 
 
 ### 🔴 Live awareness
 - When a session is on track, the app's first screen shows an unmissable pulsing **LIVE NOW** banner, the countdown card auto-selects the live session, and the timetable row gets a live indicator
+- A broadcast-style **session clock with milliseconds** ticks in the banner and countdown card while a session runs
 
 ### ⏱️ Countdown
 - **A countdown for every session** — tap any chip (FP1, Sprint Quali, Sprint, Qualifying, Race) to target it; defaults to the next session that hasn't started, with live and complete states
@@ -36,7 +37,8 @@ Built entirely with SwiftUI and SceneKit — no dependencies, no packages, just 
 - Stats derived from the actual geometry: **track length**, **corner count**, **direction of travel**, and **pit-lane time loss**
 
 ### 🏆 Results
-- **Last Grand Prix classification** with a podium visualization, gaps, points, fastest-lap highlight, and grid-delta arrows showing positions gained or lost
+- **Every completed Grand Prix of the season** — a round picker loads any race's podium, classification, and qualifying on demand
+- Podium visualization, gaps, points, fastest-lap highlight, and grid-delta arrows showing positions gained or lost
 - **Qualifying mode** with each driver's best time and the segment it came from (Q1/Q2/Q3)
 
 ### 🔢 Standings

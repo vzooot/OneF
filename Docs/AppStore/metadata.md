@@ -69,9 +69,9 @@ race,countdown,grand prix,motorsport,standings,results,circuit,track,session,wid
 
 | Field | Value |
 |---|---|
-| Support URL | https://github.com/vasium/OneF |
+| Support URL | https://github.com/vzooot/OneF |
 | Marketing URL | (optional, leave empty) |
-| Privacy Policy URL | https://github.com/vasium/OneF/blob/main/PRIVACY.md |
+| Privacy Policy URL | https://github.com/vzooot/OneF/blob/main/PRIVACY.md |
 
 ## App Privacy (questionnaire)
 

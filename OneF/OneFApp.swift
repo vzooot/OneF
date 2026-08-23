@@ -21,6 +21,8 @@ struct RootView: View {
                 .tabItem { Label("Results", systemImage: "trophy.fill") }
             StandingsTabView()
                 .tabItem { Label("Standings", systemImage: "list.number") }
+            ChatView()
+                .tabItem { Label("Paddock", systemImage: "bubble.left.and.bubble.right.fill") }
             NewsView()
                 .tabItem { Label("News", systemImage: "newspaper.fill") }
         }

@@ -50,6 +50,16 @@ Built entirely with SwiftUI and SceneKit — no dependencies, no packages, just 
 ### 🔢 Standings
 - **Complete championships** — every driver and every constructor, with car numbers, wins, points, and gap to the leader
 
+### 💬 Paddock Chat
+- **A live chat room per race weekend**, built on CloudKit's public database — no accounts, no servers, users are their iCloud identity with a chosen paddock name
+- Community-rules gate, profanity masking, long-press to **report or block** (App Review guideline 1.2 compliant)
+
+### 🌦️ Session weather
+- Hourly **forecast at the circuit** on every timetable row (Open-Meteo, no key): conditions, temperature, rain probability — highlighted when rain risk is real
+
+### 🙈 Spoiler mode
+- Eye toggle on Results: classifications stay **blurred until tapped**, re-arming when you switch rounds — for fans watching delayed
+
 ### 📰 Paddock News
 - Latest F1 stories aggregated from **Formula1.com, BBC Sport, and Motorsport.com** RSS feeds — merged, deduplicated, sorted newest-first, with thumbnails
 - No API keys, no accounts

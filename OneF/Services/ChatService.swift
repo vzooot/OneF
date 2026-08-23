@@ -69,6 +69,47 @@ enum ChatService {
         return ChatMessage(id: saved.recordID, text: text, sender: sender, senderId: senderId, date: created)
     }
 
+    // MARK: - Nickname registration
+
+    enum NameClaim {
+        case claimed
+        case taken
+        case failed(String)
+    }
+
+    /// Atomically reserves a paddock name: the record ID *is* the normalized
+    /// name, and CloudKit record IDs are unique — so a second claim of the
+    /// same name fails at the server, no matter who races whom.
+    static func claimNickname(_ name: String) async -> NameClaim {
+        let normalized = name.lowercased().trimmingCharacters(in: .whitespaces)
+        let recordID = CKRecord.ID(recordName: "name-\(normalized)")
+        let userId = await currentUserId() ?? "unknown"
+
+        let record = CKRecord(recordType: "Profile", recordID: recordID)
+        record["displayName"] = name
+        record["ownerId"] = userId
+
+        do {
+            _ = try await database.save(record)
+            return .claimed
+        } catch let error as CKError where error.code == .serverRecordChanged {
+            // Name exists — fine if it's already ours.
+            if let existing = try? await database.record(for: recordID),
+               existing["ownerId"] as? String == userId {
+                return .claimed
+            }
+            return .taken
+        } catch {
+            return .failed(error.localizedDescription)
+        }
+    }
+
+    /// Frees a previously claimed name (best-effort, when renaming).
+    static func releaseNickname(_ name: String) async {
+        let normalized = name.lowercased().trimmingCharacters(in: .whitespaces)
+        _ = try? await database.deleteRecord(withID: CKRecord.ID(recordName: "name-\(normalized)"))
+    }
+
     /// Files a report record the developer reviews in the CloudKit dashboard.
     static func report(_ message: ChatMessage, reason: String) async {
         let record = CKRecord(recordType: "Report")

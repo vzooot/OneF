@@ -97,7 +97,7 @@ struct ChatView: View {
             Text("PICK A PADDOCK NAME")
                 .font(.f1(22).italic())
                 .foregroundStyle(.white)
-            Text("This is how other fans see you. You can't change it often, so choose wisely.")
+            Text("This is how other fans see you. Names are unique — first come, first served.")
                 .font(.subheadline)
                 .foregroundStyle(Theme.dimText)
             TextField("e.g. GravelTrapHero", text: $nicknameDraft)
@@ -115,23 +115,37 @@ struct ChatView: View {
                         nicknameFocused = true
                     }
                 }
+            if let error = model.nicknameError {
+                Text(error)
+                    .font(.system(size: 12))
+                    .foregroundStyle(Theme.f1Red)
+            }
+
             Button {
-                model.saveNickname(nicknameDraft)
-                editingName = false
+                Task {
+                    if await model.claimNickname(nicknameDraft) {
+                        editingName = false
+                    }
+                }
             } label: {
-                Text(editingName ? "SAVE NAME" : "JOIN THE PADDOCK")
-                    .font(.f1(15).italic())
-                    .tracking(1)
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 13)
-                    .background(
-                        nicknameDraft.trimmingCharacters(in: .whitespaces).count >= 3 ? Theme.f1Red : Color.gray.opacity(0.3),
-                        in: RoundedRectangle(cornerRadius: 12)
-                    )
+                HStack(spacing: 8) {
+                    if model.isClaimingName {
+                        ProgressView().tint(.white)
+                    }
+                    Text(editingName ? "REGISTER NAME" : "JOIN THE PADDOCK")
+                        .font(.f1(15).italic())
+                        .tracking(1)
+                }
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 13)
+                .background(
+                    nicknameDraft.trimmingCharacters(in: .whitespaces).count >= 3 ? Theme.f1Red : Color.gray.opacity(0.3),
+                    in: RoundedRectangle(cornerRadius: 12)
+                )
             }
             .buttonStyle(.plain)
-            .disabled(nicknameDraft.trimmingCharacters(in: .whitespaces).count < 3)
+            .disabled(nicknameDraft.trimmingCharacters(in: .whitespaces).count < 3 || model.isClaimingName)
 
             if editingName {
                 Button {

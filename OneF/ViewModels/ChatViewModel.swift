@@ -92,10 +92,37 @@ final class ChatViewModel {
         }
     }
 
-    func saveNickname(_ name: String) {
-        let cleaned = ChatModeration.cleaned(name.trimmingCharacters(in: .whitespacesAndNewlines))
-        nickname = String(cleaned.prefix(20))
-        UserDefaults.standard.set(nickname, forKey: "chatNickname")
+    var nicknameError: String?
+    var isClaimingName = false
+
+    /// Registers the name globally (unique across all users) before adopting it.
+    /// Returns true when the name is secured.
+    func claimNickname(_ name: String) async -> Bool {
+        let cleaned = String(ChatModeration.cleaned(name.trimmingCharacters(in: .whitespacesAndNewlines)).prefix(20))
+        guard cleaned.count >= 3 else {
+            nicknameError = "Name needs at least 3 characters."
+            return false
+        }
+        isClaimingName = true
+        defer { isClaimingName = false }
+
+        switch await ChatService.claimNickname(cleaned) {
+        case .claimed:
+            let previous = nickname
+            if !previous.isEmpty, previous.lowercased() != cleaned.lowercased() {
+                await ChatService.releaseNickname(previous)
+            }
+            nickname = cleaned
+            UserDefaults.standard.set(cleaned, forKey: "chatNickname")
+            nicknameError = nil
+            return true
+        case .taken:
+            nicknameError = "\"\(cleaned)\" is already taken — try another."
+            return false
+        case .failed(let message):
+            nicknameError = "Couldn't register the name: \(message)"
+            return false
+        }
     }
 
     func agreeToRules() {

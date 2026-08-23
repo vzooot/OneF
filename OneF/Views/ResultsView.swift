@@ -1,15 +1,32 @@
 import SwiftUI
 
-/// Results tab: podium and full classification of the last grand prix,
-/// switchable to qualifying, plus the constructors' championship.
+/// Results tab: per-session classifications (race, sprint, qualifying) for
+/// any round — including the ongoing weekend — plus the constructors'
+/// championship.
 struct ResultsView: View {
-    enum Mode: String, CaseIterable {
+    enum Mode: String {
         case race = "RACE"
-        case qualifying = "QUALIFYING"
+        case sprint = "SPRINT"
+        case qualifying = "QUALI"
     }
 
     @State private var model = ResultsViewModel()
-    @State private var mode: Mode = .race
+    @State private var mode: Mode?
+
+    /// Sprint mode only appears on sprint weekends.
+    private var availableModes: [Mode] {
+        model.calendarRace?.isSprintWeekend == true ? [.race, .sprint, .qualifying] : [.race, .qualifying]
+    }
+
+    /// Falls back to the first session that actually has results — so during
+    /// a live weekend the sprint or quali shows before the race exists.
+    private var resolvedMode: Mode {
+        if let mode, availableModes.contains(mode) { return mode }
+        if model.raceResults?.isEmpty == false { return .race }
+        if model.sprintResults?.isEmpty == false { return .sprint }
+        if model.qualifyingResults?.isEmpty == false { return .qualifying }
+        return .race
+    }
 
     var body: some View {
         ZStack {
@@ -38,30 +55,17 @@ struct ResultsView: View {
     private var loadedContent: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
-                if let race = model.raceWithResults, let results = race.results, !results.isEmpty {
+                if let race = model.calendarRace {
                     header(race: race)
 
-                    if model.completedRaces.count > 1 {
+                    if model.pickerRaces.count > 1 {
                         roundPicker
                     }
 
                     Group {
-                        PodiumView(results: results)
-
                         modePicker
 
-                        if mode == .race {
-                            if let fastest = results.first(where: { $0.hasFastestLap }) {
-                                FastestLapCard(result: fastest)
-                            }
-                            RaceClassificationView(results: results)
-                        } else if let quali = model.raceWithQualifying?.qualifyingResults, !quali.isEmpty {
-                            QualifyingClassificationView(results: quali)
-                        } else {
-                            Text("No qualifying data yet.")
-                                .font(.subheadline)
-                                .foregroundStyle(Theme.dimText)
-                        }
+                        sessionContent
                     }
                     .opacity(model.isSwitching ? 0.35 : 1)
                     .overlay {
@@ -75,7 +79,7 @@ struct ResultsView: View {
                         Text("🏁 NO RESULTS YET")
                             .font(.f1(24).italic())
                             .foregroundStyle(.white)
-                        Text("The season hasn't produced a classified race yet. Check back after lights out.")
+                        Text("The season hasn't produced a classified session yet. Check back after the first weekend starts.")
                             .font(.subheadline)
                             .foregroundStyle(Theme.dimText)
                     }
@@ -90,6 +94,59 @@ struct ResultsView: View {
             .padding(.bottom, 32)
         }
         .refreshable { await model.load() }
+    }
+
+    /// The classification (or a friendly not-yet message) for the mode in view.
+    @ViewBuilder
+    private var sessionContent: some View {
+        switch resolvedMode {
+        case .race:
+            if let results = model.raceResults, !results.isEmpty {
+                PodiumView(results: results)
+                if let fastest = results.first(where: { $0.hasFastestLap }) {
+                    FastestLapCard(result: fastest)
+                }
+                RaceClassificationView(results: results)
+            } else {
+                notYet("The grand prix hasn't been classified yet", session: model.calendarRace?.startDate)
+            }
+        case .sprint:
+            if let results = model.sprintResults, !results.isEmpty {
+                PodiumView(results: results)
+                RaceClassificationView(results: results)
+            } else {
+                notYet("The sprint hasn't been classified yet", session: model.calendarRace?.sessions.first(where: { $0.kind == .sprint })?.date)
+            }
+        case .qualifying:
+            if let results = model.qualifyingResults, !results.isEmpty {
+                QualifyingClassificationView(results: results)
+            } else {
+                notYet("Qualifying hasn't been classified yet", session: model.calendarRace?.sessions.first(where: { $0.kind == .qualifying })?.date)
+            }
+        }
+    }
+
+    private func notYet(_ message: String, session: Date?) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("⏳ \(message.uppercased())")
+                .font(.f1(16).italic())
+                .foregroundStyle(.white)
+            if let session, session > .now {
+                Text("Scheduled for \(session.formatted(.dateTime.weekday(.wide).day().month().hour().minute()))")
+                    .font(.subheadline)
+                    .foregroundStyle(Theme.dimText)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Theme.card)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .strokeBorder(Theme.cardStroke, lineWidth: 1)
+                )
+        )
     }
 
     private func header(race: Race) -> some View {
@@ -110,7 +167,7 @@ struct ResultsView: View {
         ScrollViewReader { proxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
-                    ForEach(model.completedRaces) { race in
+                    ForEach(model.pickerRaces) { race in
                         let isSelected = race.round == model.selectedRound
                         Button {
                             Task { await model.select(round: race.round) }
@@ -151,8 +208,8 @@ struct ResultsView: View {
 
     private var modePicker: some View {
         HStack(spacing: 6) {
-            ForEach(Mode.allCases, id: \.self) { candidate in
-                let isSelected = candidate == mode
+            ForEach(availableModes, id: \.self) { candidate in
+                let isSelected = candidate == resolvedMode
                 Button {
                     mode = candidate
                 } label: {

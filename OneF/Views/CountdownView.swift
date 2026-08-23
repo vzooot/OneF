@@ -137,27 +137,20 @@ struct CountdownView: View {
         }
     }
 
+    // The elapsed session clock lives in the LiveSessionBanner at the top of
+    // the screen — deliberately not repeated here.
     private func liveBanner(_ session: WeekendSession) -> some View {
-        VStack(spacing: 8) {
-            HStack(spacing: 10) {
-                Circle()
-                    .fill(Theme.f1Red)
-                    .frame(width: 10, height: 10)
-                    .shadow(color: Theme.f1Red, radius: 6)
-                Text("\(session.kind.rawValue.uppercased()) IS LIVE")
-                    .font(.f1(22).italic())
-                    .foregroundStyle(.white)
-            }
-            SessionClock(start: session.date)
-                .font(.f1Digits(40))
-                .foregroundStyle(Theme.f1Red)
-            Text("SESSION TIME")
-                .font(.f1(10, weight: .bold))
-                .tracking(3)
-                .foregroundStyle(Theme.dimText)
+        HStack(spacing: 10) {
+            Circle()
+                .fill(Theme.f1Red)
+                .frame(width: 10, height: 10)
+                .shadow(color: Theme.f1Red, radius: 6)
+            Text("\(session.kind.rawValue.uppercased()) IS LIVE")
+                .font(.f1(22).italic())
+                .foregroundStyle(.white)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 14)
+        .padding(.vertical, 18)
     }
 
     private func tile(_ value: Int, _ label: String, hot: Bool = false) -> some View {

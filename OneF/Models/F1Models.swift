@@ -65,9 +65,10 @@ struct Race: Decodable, Identifiable, Equatable {
     let qualifying: SessionTime?
     let sprint: SessionTime?
     let sprintQualifying: SessionTime?
-    /// Present only on the results/qualifying endpoints.
+    /// Present only on the results/qualifying/sprint endpoints.
     let results: [RaceResult]?
     let qualifyingResults: [QualifyingResult]?
+    let sprintResults: [RaceResult]?
 
     enum CodingKeys: String, CodingKey {
         case season, round, raceName, date, time
@@ -80,6 +81,7 @@ struct Race: Decodable, Identifiable, Equatable {
         case sprintQualifying = "SprintQualifying"
         case results = "Results"
         case qualifyingResults = "QualifyingResults"
+        case sprintResults = "SprintResults"
     }
 
     var id: String { "\(season)-\(round)" }

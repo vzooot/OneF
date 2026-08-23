@@ -65,4 +65,9 @@ enum F1API {
     static func qualifying(round: String) async throws -> Race? {
         try await fetch("current/\(round)/qualifying.json").raceTable?.races.first
     }
+
+    /// Sprint race classification for a sprint-weekend round.
+    static func sprintResults(round: String) async throws -> Race? {
+        try await fetch("current/\(round)/sprint.json").raceTable?.races.first
+    }
 }

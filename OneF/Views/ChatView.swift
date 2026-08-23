@@ -246,6 +246,8 @@ struct ChatView: View {
                     .padding(.horizontal, 16)
                     .padding(.bottom, 8)
                 }
+                .scrollDismissesKeyboard(.interactively)
+                .onTapGesture { draftFocused = false }
                 .onChange(of: model.messages) { _, messages in
                     if let last = messages.last {
                         withAnimation { proxy.scrollTo(last.id, anchor: .bottom) }

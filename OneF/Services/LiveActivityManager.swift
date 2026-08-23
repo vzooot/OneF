@@ -53,6 +53,11 @@ enum LiveActivityManager {
                 var updated = state
                 updated.isLive = true
                 Task { await activity.update(.init(state: updated, staleDate: state.sessionEndDate)) }
+            } else {
+                // Touch the activity so its view re-renders — this is what
+                // flips the countdown from relative style to the ticking
+                // timer once the session is under 24 hours away.
+                Task { await activity.update(.init(state: state, staleDate: state.sessionEndDate)) }
             }
         }
     }

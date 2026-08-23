@@ -25,11 +25,9 @@ struct RaceLiveActivity: Widget {
                             .font(.system(size: 15, weight: .black))
                             .foregroundStyle(f1Red)
                     } else {
-                        Text(timerInterval: Date.now...context.state.sessionDate, countsDown: true)
-                            .font(.system(size: 15, weight: .black).monospacedDigit())
+                        countdownText(to: context.state.sessionDate, size: 15)
                             .foregroundStyle(f1Red)
-                            .frame(maxWidth: 70)
-                            .multilineTextAlignment(.trailing)
+                            .frame(maxWidth: 80)
                     }
                 }
                 DynamicIslandExpandedRegion(.bottom) {
@@ -59,11 +57,9 @@ struct RaceLiveActivity: Widget {
                         .font(.system(size: 12, weight: .black))
                         .foregroundStyle(f1Red)
                 } else {
-                    Text(timerInterval: Date.now...context.state.sessionDate, countsDown: true)
-                        .font(.system(size: 12, weight: .bold).monospacedDigit())
+                    countdownText(to: context.state.sessionDate, size: 12)
                         .foregroundStyle(f1Red)
                         .frame(maxWidth: 60)
-                        .multilineTextAlignment(.trailing)
                 }
             } minimal: {
                 if context.state.isLive {
@@ -76,6 +72,23 @@ struct RaceLiveActivity: Widget {
             }
             .keylineTint(f1Red)
         }
+    }
+
+    /// Ticking H:MM:SS only makes sense close to the session; further out the
+    /// hour count balloons ("279:47:34") and wraps. Relative style reads
+    /// naturally at any distance.
+    private func countdownText(to date: Date, size: CGFloat) -> some View {
+        Group {
+            if date.timeIntervalSinceNow > 24 * 3600 {
+                Text(date, style: .relative)
+            } else {
+                Text(timerInterval: Date.now...date, countsDown: true)
+            }
+        }
+        .font(.system(size: size, weight: .black).width(.condensed).monospacedDigit())
+        .lineLimit(1)
+        .minimumScaleFactor(0.4)
+        .multilineTextAlignment(.trailing)
     }
 
     private func lockScreenView(_ context: ActivityViewContext<RaceActivityAttributes>) -> some View {
@@ -107,11 +120,9 @@ struct RaceLiveActivity: Widget {
                 }
             } else {
                 VStack(alignment: .trailing, spacing: 0) {
-                    Text(timerInterval: Date.now...context.state.sessionDate, countsDown: true)
-                        .font(.system(size: 26, weight: .black).width(.condensed).monospacedDigit())
+                    countdownText(to: context.state.sessionDate, size: 26)
                         .foregroundStyle(.white)
-                        .frame(maxWidth: 110)
-                        .multilineTextAlignment(.trailing)
+                        .frame(maxWidth: 140, alignment: .trailing)
                     Text("TO GREEN LIGHT")
                         .font(.system(size: 9, weight: .semibold))
                         .tracking(1)

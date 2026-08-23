@@ -20,6 +20,12 @@ final class ChatViewModel {
     var roundTitle: String = ""
     /// Surfaced in the UI instead of failing silently.
     var errorText: String?
+    /// Cursor into older history; nil once the room's beginning is reached.
+    var canLoadOlder: Bool { olderCursor != nil }
+    var isLoadingOlder = false
+
+    private var olderCursor: CKQueryOperation.Cursor?
+    private var hasPaginated = false
 
     private var currentUserId: String?
     private var pollTask: Task<Void, Never>?
@@ -66,12 +72,18 @@ final class ChatViewModel {
     func refresh() async {
         guard state == .ready, !round.isEmpty else { return }
         do {
-            let fetched = try await ChatService.messages(round: round)
+            let (fetched, cursor) = try await ChatService.messages(round: round)
+            // The refresh cursor only seeds pagination before the user has
+            // paged back; afterwards the deeper cursor stays authoritative.
+            if !hasPaginated {
+                olderCursor = cursor
+            }
             let blocked = ChatModeration.blockedUsers
-            // Keep any local echoes the server hasn't returned yet.
+            // Merge instead of replace, so paged-in history and local echoes
+            // survive every poll.
             let fetchedIds = Set(fetched.map(\.id))
-            let pendingEchoes = messages.filter { !fetchedIds.contains($0.id) && $0.date > Date().addingTimeInterval(-60) }
-            messages = (fetched + pendingEchoes)
+            let kept = messages.filter { !fetchedIds.contains($0.id) }
+            messages = (fetched + kept)
                 .filter { !blocked.contains($0.senderId) }
                 .sorted { $0.date < $1.date }
             errorText = nil
@@ -81,6 +93,24 @@ final class ChatViewModel {
             // Same: routine cancellation, next poll succeeds.
         } catch {
             errorText = "Couldn't load messages: \(error.localizedDescription)"
+        }
+    }
+
+    /// Pages one batch further back into the room's history.
+    func loadOlder() async {
+        guard let cursor = olderCursor, !isLoadingOlder else { return }
+        isLoadingOlder = true
+        defer { isLoadingOlder = false }
+        do {
+            let (older, next) = try await ChatService.olderMessages(from: cursor)
+            hasPaginated = true
+            olderCursor = next
+            let blocked = ChatModeration.blockedUsers
+            let existingIds = Set(messages.map(\.id))
+            let fresh = older.filter { !existingIds.contains($0.id) && !blocked.contains($0.senderId) }
+            messages = (fresh + messages).sorted { $0.date < $1.date }
+        } catch {
+            errorText = "Couldn't load earlier messages: \(error.localizedDescription)"
         }
     }
 

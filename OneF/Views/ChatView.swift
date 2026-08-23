@@ -217,6 +217,25 @@ struct ChatView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 10) {
+                        if model.canLoadOlder {
+                            Button {
+                                Task { await model.loadOlder() }
+                            } label: {
+                                HStack(spacing: 6) {
+                                    if model.isLoadingOlder {
+                                        ProgressView().tint(Theme.dimText)
+                                    }
+                                    Text("LOAD EARLIER MESSAGES")
+                                        .font(.f1(11, weight: .bold))
+                                        .tracking(1)
+                                }
+                                .foregroundStyle(Theme.dimText)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 8)
+                            }
+                            .buttonStyle(.plain)
+                            .disabled(model.isLoadingOlder)
+                        }
                         if model.messages.isEmpty {
                             Text("Nothing here yet — be the first voice in the paddock. 🏁")
                                 .font(.subheadline)
@@ -248,8 +267,11 @@ struct ChatView: View {
                 }
                 .scrollDismissesKeyboard(.interactively)
                 .onTapGesture { draftFocused = false }
-                .onChange(of: model.messages) { _, messages in
-                    if let last = messages.last {
+                .onChange(of: model.messages) { old, new in
+                    // Follow the conversation only when something NEW arrives
+                    // at the bottom — paging in older history must not yank
+                    // the scroll position down.
+                    if let last = new.last, old.last?.id != last.id {
                         withAnimation { proxy.scrollTo(last.id, anchor: .bottom) }
                     }
                 }

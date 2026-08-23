@@ -34,9 +34,9 @@ final class ChatViewModel {
 
         // Reinstall / new device: restore the name this iCloud identity
         // already registered.
-        if nickname.isEmpty, let registered = await ChatService.registeredNickname() {
-            nickname = registered
-            UserDefaults.standard.set(registered, forKey: "chatNickname")
+        if nickname.isEmpty, let profile = await ChatService.registeredProfile() {
+            nickname = profile.name
+            UserDefaults.standard.set(profile.name, forKey: "chatNickname")
         }
 
         // Chat room is scoped to the upcoming race weekend.
@@ -112,6 +112,19 @@ final class ChatViewModel {
         }
         isClaimingName = true
         defer { isClaimingName = false }
+
+        // Renames are limited to one per 30 days, measured against the
+        // server-side claim date so reinstalls don't reset the clock.
+        if !nickname.isEmpty, cleaned.lowercased() != nickname.lowercased(),
+           let profile = await ChatService.registeredProfile() {
+            let cooldown: TimeInterval = 30 * 86400
+            let elapsed = Date().timeIntervalSince(profile.claimedAt)
+            if elapsed < cooldown {
+                let daysLeft = Int(((cooldown - elapsed) / 86400).rounded(.up))
+                nicknameError = "You can change your name again in \(daysLeft) day\(daysLeft == 1 ? "" : "s")."
+                return false
+            }
+        }
 
         switch await ChatService.claimNickname(cleaned) {
         case .claimed:

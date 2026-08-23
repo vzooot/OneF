@@ -110,17 +110,19 @@ enum ChatService {
         _ = try? await database.deleteRecord(withID: CKRecord.ID(recordName: "name-\(normalized)"))
     }
 
-    /// The name this iCloud identity already registered, if any — restores
-    /// the account after a reinstall or on a new device.
-    static func registeredNickname() async -> String? {
+    /// The name this iCloud identity already registered and when it was
+    /// claimed — restores the account after a reinstall and anchors the
+    /// rename cooldown to a server-side date.
+    static func registeredProfile() async -> (name: String, claimedAt: Date)? {
         guard let userId = await currentUserId() else { return nil }
         let query = CKQuery(
             recordType: "Profile",
             predicate: NSPredicate(format: "ownerId == %@", userId)
         )
         guard let (results, _) = try? await database.records(matching: query, resultsLimit: 1),
-              let record = results.first.flatMap({ try? $0.1.get() }) else { return nil }
-        return record["displayName"] as? String
+              let record = results.first.flatMap({ try? $0.1.get() }),
+              let name = record["displayName"] as? String else { return nil }
+        return (name, record.creationDate ?? .distantPast)
     }
 
     /// Files a report record the developer reviews in the CloudKit dashboard.

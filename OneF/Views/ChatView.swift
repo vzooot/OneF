@@ -5,6 +5,7 @@ struct ChatView: View {
     @State private var model = ChatViewModel()
     @State private var draft = ""
     @State private var nicknameDraft = ""
+    @State private var editingName = false
     @FocusState private var nicknameFocused: Bool
     @FocusState private var draftFocused: Bool
 
@@ -26,7 +27,7 @@ struct ChatView: View {
             case .ready:
                 if !model.agreedToRules {
                     rulesGate
-                } else if model.nickname.isEmpty {
+                } else if model.nickname.isEmpty || editingName {
                     nicknamePrompt
                 } else {
                     chatRoom
@@ -116,8 +117,9 @@ struct ChatView: View {
                 }
             Button {
                 model.saveNickname(nicknameDraft)
+                editingName = false
             } label: {
-                Text("JOIN THE PADDOCK")
+                Text(editingName ? "SAVE NAME" : "JOIN THE PADDOCK")
                     .font(.f1(15).italic())
                     .tracking(1)
                     .foregroundStyle(.white)
@@ -130,6 +132,18 @@ struct ChatView: View {
             }
             .buttonStyle(.plain)
             .disabled(nicknameDraft.trimmingCharacters(in: .whitespaces).count < 3)
+
+            if editingName {
+                Button {
+                    editingName = false
+                } label: {
+                    Text("Cancel")
+                        .font(.subheadline)
+                        .foregroundStyle(Theme.dimText)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.plain)
+            }
         }
         .padding(20)
         .background(
@@ -144,14 +158,42 @@ struct ChatView: View {
 
     private var chatRoom: some View {
         VStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text("PADDOCK CHAT")
-                    .font(.f1(30).italic())
-                    .foregroundStyle(.white)
-                Text(model.roundTitle.uppercased())
-                    .font(.f1(12, weight: .semibold))
-                    .tracking(2)
-                    .foregroundStyle(Theme.dimText)
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("PADDOCK CHAT")
+                        .font(.f1(30).italic())
+                        .foregroundStyle(.white)
+                    Text(model.roundTitle.uppercased())
+                        .font(.f1(12, weight: .semibold))
+                        .tracking(2)
+                        .foregroundStyle(Theme.dimText)
+                }
+
+                Spacer()
+
+                // Current paddock name; tap to change it.
+                Button {
+                    nicknameDraft = model.nickname
+                    editingName = true
+                } label: {
+                    HStack(spacing: 5) {
+                        Text(model.nickname)
+                            .font(.f1(13).italic())
+                            .foregroundStyle(Theme.f1Red)
+                            .lineLimit(1)
+                        Image(systemName: "pencil")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundStyle(Theme.dimText)
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(
+                        Capsule()
+                            .fill(Color.white.opacity(0.05))
+                            .overlay(Capsule().strokeBorder(Theme.cardStroke, lineWidth: 1))
+                    )
+                }
+                .buttonStyle(.plain)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)

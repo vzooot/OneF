@@ -1,3 +1,4 @@
+import CloudKit
 import Foundation
 import Observation
 
@@ -67,6 +68,10 @@ final class ChatViewModel {
                 .filter { !blocked.contains($0.senderId) }
                 .sorted { $0.date < $1.date }
             errorText = nil
+        } catch is CancellationError {
+            // A poll interrupted by navigation — not worth reporting.
+        } catch let error as CKError where error.code == .operationCancelled {
+            // Same: routine cancellation, next poll succeeds.
         } catch {
             errorText = "Couldn't load messages: \(error.localizedDescription)"
         }

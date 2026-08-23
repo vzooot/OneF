@@ -6,13 +6,32 @@ struct TrackSectionView: View {
     let map: TrackMap
     let circuit: Circuit
 
+    @State private var resetToken = 0
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             SectionTitle("THE CIRCUIT")
 
             VStack(spacing: 0) {
-                Track3DView(map: map)
+                Track3DView(map: map, resetToken: resetToken)
                     .frame(height: 300)
+                    .overlay(alignment: .topTrailing) {
+                        Button {
+                            resetToken += 1
+                        } label: {
+                            Image(systemName: "arrow.counterclockwise")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundStyle(Theme.dimText)
+                                .padding(9)
+                                .background(
+                                    Circle()
+                                        .fill(Color.black.opacity(0.5))
+                                        .overlay(Circle().strokeBorder(Theme.cardStroke, lineWidth: 1))
+                                )
+                        }
+                        .buttonStyle(.plain)
+                        .padding(10)
+                    }
 
                 Text("DRAG TO ROTATE · PINCH TO ZOOM")
                     .font(.f1(10, weight: .bold))

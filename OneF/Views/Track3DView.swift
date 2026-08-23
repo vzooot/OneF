@@ -6,6 +6,9 @@ import SceneKit
 /// Slowly auto-rotates; drag to orbit, pinch to zoom.
 struct Track3DView: UIViewRepresentable {
     let map: TrackMap
+    /// Incrementing this rebuilds the scene, snapping camera and rotation
+    /// back to the initial framing.
+    var resetToken: Int = 0
 
     func makeUIView(context: Context) -> SCNView {
         let view = SCNView()
@@ -14,19 +17,25 @@ struct Track3DView: UIViewRepresentable {
         view.antialiasingMode = .multisampling4X
         view.scene = TrackSceneBuilder.build(map: map)
         context.coordinator.circuitName = map.circuitName
+        context.coordinator.resetToken = resetToken
         return view
     }
 
     func updateUIView(_ view: SCNView, context: Context) {
-        guard context.coordinator.circuitName != map.circuitName else { return }
+        guard context.coordinator.circuitName != map.circuitName
+                || context.coordinator.resetToken != resetToken else { return }
         context.coordinator.circuitName = map.circuitName
+        context.coordinator.resetToken = resetToken
         view.scene = TrackSceneBuilder.build(map: map)
+        // Drop any free camera the user's gestures created.
+        view.pointOfView = view.scene?.rootNode.childNodes.first { $0.camera != nil }
     }
 
     func makeCoordinator() -> Coordinator { Coordinator() }
 
     final class Coordinator {
         var circuitName: String?
+        var resetToken = 0
     }
 }
 

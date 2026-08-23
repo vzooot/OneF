@@ -5,6 +5,8 @@ struct ChatView: View {
     @State private var model = ChatViewModel()
     @State private var draft = ""
     @State private var nicknameDraft = ""
+    @FocusState private var nicknameFocused: Bool
+    @FocusState private var draftFocused: Bool
 
     var body: some View {
         ZStack {
@@ -99,9 +101,19 @@ struct ChatView: View {
                 .foregroundStyle(Theme.dimText)
             TextField("e.g. GravelTrapHero", text: $nicknameDraft)
                 .textFieldStyle(.plain)
+                .focused($nicknameFocused)
+                .submitLabel(.done)
+                .autocorrectionDisabled()
                 .padding(12)
                 .background(Color.black.opacity(0.4), in: RoundedRectangle(cornerRadius: 10))
                 .foregroundStyle(.white)
+                .contentShape(Rectangle())
+                .onTapGesture { nicknameFocused = true }
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                        nicknameFocused = true
+                    }
+                }
             Button {
                 model.saveNickname(nicknameDraft)
             } label: {
@@ -185,6 +197,15 @@ struct ChatView: View {
                 }
             }
 
+            if let error = model.errorText {
+                Text(error)
+                    .font(.system(size: 11))
+                    .foregroundStyle(Theme.f1Red.opacity(0.9))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 16)
+                    .padding(.top, 4)
+            }
+
             inputBar
         }
     }
@@ -193,6 +214,7 @@ struct ChatView: View {
         HStack(spacing: 10) {
             TextField("Say something…", text: $draft, axis: .vertical)
                 .textFieldStyle(.plain)
+                .focused($draftFocused)
                 .lineLimit(1...4)
                 .padding(.horizontal, 14)
                 .padding(.vertical, 10)
@@ -202,6 +224,8 @@ struct ChatView: View {
                         .overlay(RoundedRectangle(cornerRadius: 18).strokeBorder(Theme.cardStroke, lineWidth: 1))
                 )
                 .foregroundStyle(.white)
+                .contentShape(Rectangle())
+                .onTapGesture { draftFocused = true }
 
             Button {
                 let text = draft

@@ -27,12 +27,15 @@ enum ChatService {
     }
 
     /// Latest messages for one race weekend, oldest first.
+    /// Sorts on the custom `created` field — custom fields get sortable
+    /// indexes automatically in the development schema; the system
+    /// creationDate does not.
     static func messages(round: String, limit: Int = 80) async throws -> [ChatMessage] {
         let query = CKQuery(
             recordType: "Message",
             predicate: NSPredicate(format: "round == %@", round)
         )
-        query.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        query.sortDescriptors = [NSSortDescriptor(key: "created", ascending: false)]
 
         do {
             let (results, _) = try await database.records(matching: query, resultsLimit: limit)
@@ -41,24 +44,29 @@ enum ChatService {
                 .compactMap { record in
                     guard let text = record["text"] as? String,
                           let sender = record["sender"] as? String,
-                          let senderId = record["senderId"] as? String,
-                          let date = record.creationDate else { return nil }
+                          let senderId = record["senderId"] as? String else { return nil }
+                    let date = (record["created"] as? Date) ?? record.creationDate ?? .now
                     return ChatMessage(id: record.recordID, text: text, sender: sender, senderId: senderId, date: date)
                 }
-                .reversed()
+                .sorted { $0.date < $1.date }
         } catch let error as CKError where error.code == .unknownItem || error.code == .invalidArguments {
             // Record type doesn't exist yet (first ever run) — empty room.
             return []
         }
     }
 
-    static func send(text: String, sender: String, round: String) async throws {
+    /// Returns the sent message so the UI can echo it immediately.
+    static func send(text: String, sender: String, round: String) async throws -> ChatMessage {
         let record = CKRecord(recordType: "Message")
+        let senderId = await currentUserId() ?? "unknown"
+        let created = Date()
         record["text"] = text
         record["sender"] = sender
         record["round"] = round
-        record["senderId"] = await currentUserId() ?? "unknown"
-        _ = try await database.save(record)
+        record["senderId"] = senderId
+        record["created"] = created
+        let saved = try await database.save(record)
+        return ChatMessage(id: saved.recordID, text: text, sender: sender, senderId: senderId, date: created)
     }
 
     /// Files a report record the developer reviews in the CloudKit dashboard.

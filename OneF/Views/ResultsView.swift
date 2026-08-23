@@ -62,24 +62,18 @@ struct ResultsView: View {
 
     /// Tap-to-reveal cover for people watching sessions delayed.
     private var spoilerShield: some View {
-        Button {
-            revealed = true
-        } label: {
-            VStack(spacing: 8) {
-                Image(systemName: "eye.slash.fill")
-                    .font(.system(size: 28))
-                    .foregroundStyle(Theme.f1Red)
-                Text("SPOILERS HIDDEN")
-                    .font(.f1(17).italic())
-                    .foregroundStyle(.white)
-                Text("Tap to reveal the results")
-                    .font(.system(size: 12))
-                    .foregroundStyle(Theme.dimText)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .contentShape(Rectangle())
+        VStack(spacing: 8) {
+            Image(systemName: "eye.slash.fill")
+                .font(.system(size: 28))
+                .foregroundStyle(Theme.f1Red)
+            Text("SPOILERS HIDDEN")
+                .font(.f1(17).italic())
+                .foregroundStyle(.white)
+            Text("Tap to reveal the results")
+                .font(.system(size: 12))
+                .foregroundStyle(Theme.dimText)
         }
-        .buttonStyle(.plain)
+        .frame(maxWidth: .infinity)
     }
 
     private var loadedContent: some View {
@@ -95,15 +89,26 @@ struct ResultsView: View {
                     Group {
                         modePicker
 
-                        sessionContent
-                            .blur(radius: isShielded ? 18 : 0)
-                            .allowsHitTesting(!isShielded)
-                            .overlay {
-                                if isShielded {
-                                    spoilerShield
-                                }
+                        // Single container so the spoiler shield renders once
+                        // over the whole classification, not per subview.
+                        VStack(alignment: .leading, spacing: 22) {
+                            sessionContent
+                        }
+                        .blur(radius: isShielded ? 18 : 0)
+                        .allowsHitTesting(!isShielded)
+                        .overlay(alignment: .top) {
+                            // Pinned near the top so it's visible without
+                            // scrolling, however tall the hidden content is.
+                            if isShielded {
+                                spoilerShield
+                                    .frame(height: 300)
                             }
-                            .animation(.easeInOut(duration: 0.25), value: isShielded)
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            if isShielded { revealed = true }
+                        }
+                        .animation(.easeInOut(duration: 0.25), value: isShielded)
                     }
                     .opacity(model.isSwitching ? 0.35 : 1)
                     .overlay {

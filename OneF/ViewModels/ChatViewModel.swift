@@ -17,6 +17,8 @@ final class ChatViewModel {
     var isSending = false
     var round: String = ""
     var roundTitle: String = ""
+    /// Surfaced in the UI instead of failing silently.
+    var errorText: String?
 
     private var currentUserId: String?
     private var pollTask: Task<Void, Never>?
@@ -55,9 +57,18 @@ final class ChatViewModel {
 
     func refresh() async {
         guard state == .ready, !round.isEmpty else { return }
-        if let fetched = try? await ChatService.messages(round: round) {
+        do {
+            let fetched = try await ChatService.messages(round: round)
             let blocked = ChatModeration.blockedUsers
-            messages = fetched.filter { !blocked.contains($0.senderId) }
+            // Keep any local echoes the server hasn't returned yet.
+            let fetchedIds = Set(fetched.map(\.id))
+            let pendingEchoes = messages.filter { !fetchedIds.contains($0.id) && $0.date > Date().addingTimeInterval(-60) }
+            messages = (fetched + pendingEchoes)
+                .filter { !blocked.contains($0.senderId) }
+                .sorted { $0.date < $1.date }
+            errorText = nil
+        } catch {
+            errorText = "Couldn't load messages: \(error.localizedDescription)"
         }
     }
 
@@ -66,8 +77,14 @@ final class ChatViewModel {
         guard !trimmed.isEmpty, !nickname.isEmpty else { return }
         isSending = true
         defer { isSending = false }
-        try? await ChatService.send(text: String(trimmed.prefix(280)), sender: nickname, round: round)
-        await refresh()
+        do {
+            let sent = try await ChatService.send(text: String(trimmed.prefix(280)), sender: nickname, round: round)
+            // Echo instantly; the next poll reconciles with the server.
+            messages.append(sent)
+            errorText = nil
+        } catch {
+            errorText = "Message not sent: \(error.localizedDescription)"
+        }
     }
 
     func saveNickname(_ name: String) {

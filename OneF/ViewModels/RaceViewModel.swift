@@ -15,6 +15,8 @@ final class RaceViewModel {
     var season: [Race] = []
     var standings: [DriverStanding] = []
     var trackMap: TrackMap?
+    /// Hourly forecast at the next race's circuit, keyed by UTC hour.
+    var weather: [Date: WeatherPoint] = [:]
 
     private var hasLoadedOnce = false
 
@@ -32,15 +34,23 @@ final class RaceViewModel {
             phase = .loaded
             hasLoadedOnce = true
 
-            // The circuit map is a bonus — fetched after the essentials, and
-            // allowed to fail silently (new circuits have no map data yet).
+            // Map and weather are bonuses — fetched after the essentials and
+            // allowed to fail silently.
             if let race {
-                trackMap = try? await TrackAPI.trackMap(
+                async let map = TrackAPI.trackMap(
                     circuitId: race.circuit.circuitId,
                     season: race.season
                 )
+                async let forecast: [Date: WeatherPoint]? = {
+                    guard let lat = race.circuit.location.lat,
+                          let long = race.circuit.location.long else { return nil }
+                    return try await WeatherAPI.hourlyForecast(latitude: lat, longitude: long)
+                }()
+                trackMap = try? await map
+                weather = ((try? await forecast) ?? nil) ?? [:]
             } else {
                 trackMap = nil
+                weather = [:]
             }
         } catch {
             // Keep stale data on screen if a refresh fails; only surface the

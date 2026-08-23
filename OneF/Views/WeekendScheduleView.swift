@@ -4,6 +4,7 @@ import SwiftUI
 /// mini-countdown on every upcoming session.
 struct WeekendScheduleView: View {
     let race: Race
+    var weather: [Date: WeatherPoint] = [:]
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 30)) { context in
@@ -19,7 +20,8 @@ struct WeekendScheduleView: View {
                         SessionRow(
                             session: session,
                             now: now,
-                            isNext: session.id == nextId
+                            isNext: session.id == nextId,
+                            weather: WeatherAPI.point(for: session.date, in: weather)
                         )
                         if session.id != sessions.last?.id {
                             Divider().overlay(Color.white.opacity(0.06))
@@ -49,6 +51,7 @@ struct SessionRow: View {
     let session: WeekendSession
     let now: Date
     let isNext: Bool
+    var weather: WeatherPoint?
 
     private var isLive: Bool {
         session.date <= now && now < session.date.addingTimeInterval(session.kind.expectedDuration)
@@ -81,10 +84,17 @@ struct SessionRow: View {
                         .fill(session.kind == .race ? Theme.f1Red : Color.white.opacity(0.06))
                 )
 
-            Text(session.kind.rawValue.uppercased())
-                .font(.f1(15, weight: .bold))
-                .foregroundStyle(isPast ? Theme.faintText : .white)
-                .strikethrough(isPast, color: Theme.faintText)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(session.kind.rawValue.uppercased())
+                    .font(.f1(15, weight: .bold))
+                    .foregroundStyle(isPast ? Theme.faintText : .white)
+                    .strikethrough(isPast, color: Theme.faintText)
+                if let weather, !isPast {
+                    Text("\(weather.symbol) \(Int(weather.temperature.rounded()))° · \(weather.precipProbability)% rain")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(weather.precipProbability >= 40 ? Color(red: 0.4, green: 0.7, blue: 1.0) : Theme.dimText)
+                }
+            }
 
             if isLive {
                 HStack(spacing: 5) {

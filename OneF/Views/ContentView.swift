@@ -47,7 +47,7 @@ struct ContentView: View {
 
                     CountdownView(race: race)
 
-                    WeekendScheduleView(race: race)
+                    WeekendScheduleView(race: race, weather: model.weather)
 
                     SessionAlertsCard(season: model.season)
 

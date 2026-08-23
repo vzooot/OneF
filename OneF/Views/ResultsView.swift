@@ -12,6 +12,11 @@ struct ResultsView: View {
 
     @State private var model = ResultsViewModel()
     @State private var mode: Mode?
+    /// Spoiler mode: classifications stay blurred until tapped.
+    @AppStorage("spoilerMode") private var spoilerMode = false
+    @State private var revealed = false
+
+    private var isShielded: Bool { spoilerMode && !revealed }
 
     /// Sprint mode only appears on sprint weekends.
     private var availableModes: [Mode] {
@@ -50,6 +55,31 @@ struct ResultsView: View {
             }
         }
         .task { await model.load() }
+        .onChange(of: model.selectedRound) { _, _ in
+            revealed = false
+        }
+    }
+
+    /// Tap-to-reveal cover for people watching sessions delayed.
+    private var spoilerShield: some View {
+        Button {
+            revealed = true
+        } label: {
+            VStack(spacing: 8) {
+                Image(systemName: "eye.slash.fill")
+                    .font(.system(size: 28))
+                    .foregroundStyle(Theme.f1Red)
+                Text("SPOILERS HIDDEN")
+                    .font(.f1(17).italic())
+                    .foregroundStyle(.white)
+                Text("Tap to reveal the results")
+                    .font(.system(size: 12))
+                    .foregroundStyle(Theme.dimText)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
 
     private var loadedContent: some View {
@@ -66,6 +96,14 @@ struct ResultsView: View {
                         modePicker
 
                         sessionContent
+                            .blur(radius: isShielded ? 18 : 0)
+                            .allowsHitTesting(!isShielded)
+                            .overlay {
+                                if isShielded {
+                                    spoilerShield
+                                }
+                            }
+                            .animation(.easeInOut(duration: 0.25), value: isShielded)
                     }
                     .opacity(model.isSwitching ? 0.35 : 1)
                     .overlay {
@@ -150,14 +188,35 @@ struct ResultsView: View {
     }
 
     private func header(race: Race) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text("RESULTS")
-                .font(.f1(30).italic())
-                .foregroundStyle(.white)
-            Text("\(Flags.emoji(for: race.circuit.location.country)) \(race.raceName.uppercased()) · ROUND \(race.roundNumber)")
-                .font(.f1(12, weight: .semibold))
-                .tracking(2)
-                .foregroundStyle(Theme.dimText)
+        HStack(alignment: .top) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("RESULTS")
+                    .font(.f1(30).italic())
+                    .foregroundStyle(.white)
+                Text("\(Flags.emoji(for: race.circuit.location.country)) \(race.raceName.uppercased()) · ROUND \(race.roundNumber)")
+                    .font(.f1(12, weight: .semibold))
+                    .tracking(2)
+                    .foregroundStyle(Theme.dimText)
+            }
+
+            Spacer()
+
+            // Spoiler mode toggle: when on, results stay hidden until tapped.
+            Button {
+                spoilerMode.toggle()
+                revealed = false
+            } label: {
+                Image(systemName: spoilerMode ? "eye.slash.fill" : "eye")
+                    .font(.system(size: 17))
+                    .foregroundStyle(spoilerMode ? Theme.f1Red : Theme.dimText)
+                    .padding(8)
+                    .background(
+                        Circle()
+                            .fill(Color.white.opacity(0.05))
+                            .overlay(Circle().strokeBorder(spoilerMode ? Theme.f1Red.opacity(0.5) : Theme.cardStroke, lineWidth: 1))
+                    )
+            }
+            .buttonStyle(.plain)
         }
         .padding(.top, 8)
     }

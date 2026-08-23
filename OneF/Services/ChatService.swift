@@ -110,6 +110,19 @@ enum ChatService {
         _ = try? await database.deleteRecord(withID: CKRecord.ID(recordName: "name-\(normalized)"))
     }
 
+    /// The name this iCloud identity already registered, if any — restores
+    /// the account after a reinstall or on a new device.
+    static func registeredNickname() async -> String? {
+        guard let userId = await currentUserId() else { return nil }
+        let query = CKQuery(
+            recordType: "Profile",
+            predicate: NSPredicate(format: "ownerId == %@", userId)
+        )
+        guard let (results, _) = try? await database.records(matching: query, resultsLimit: 1),
+              let record = results.first.flatMap({ try? $0.1.get() }) else { return nil }
+        return record["displayName"] as? String
+    }
+
     /// Files a report record the developer reviews in the CloudKit dashboard.
     static func report(_ message: ChatMessage, reason: String) async {
         let record = CKRecord(recordType: "Report")

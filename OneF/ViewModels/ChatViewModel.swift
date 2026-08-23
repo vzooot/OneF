@@ -32,6 +32,13 @@ final class ChatViewModel {
         currentUserId = await ChatService.currentUserId()
         state = .ready
 
+        // Reinstall / new device: restore the name this iCloud identity
+        // already registered.
+        if nickname.isEmpty, let registered = await ChatService.registeredNickname() {
+            nickname = registered
+            UserDefaults.standard.set(registered, forKey: "chatNickname")
+        }
+
         // Chat room is scoped to the upcoming race weekend.
         if let race = try? await F1API.nextRace() {
             round = "\(race.season)-\(race.round)"

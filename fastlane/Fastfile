@@ -1,0 +1,40 @@
+# OneF fastlane — store listing only. Building and TestFlight delivery are
+# Xcode Cloud's job; these lanes manage App Store Connect metadata.
+
+default_platform(:ios)
+
+API_KEY_PATH = File.expand_path("asc_key.json", __dir__)
+
+platform :ios do
+  desc "Upload metadata and screenshots to App Store Connect (no binary, no submit)"
+  lane :listing do
+    deliver(
+      api_key_path: API_KEY_PATH,
+      skip_binary_upload: true,
+      skip_app_version_update: true,
+      force: true,                    # skip the HTML preview prompt
+      precheck_include_in_app_purchases: false,
+      metadata_path: "fastlane/metadata",
+      screenshots_path: "fastlane/screenshots",
+      overwrite_screenshots: true
+    )
+  end
+
+  desc "Submit the prepared version for App Store review (picks latest build)"
+  lane :submit do
+    deliver(
+      api_key_path: API_KEY_PATH,
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      skip_metadata: true,
+      force: true,
+      submit_for_review: true,
+      automatic_release: false,       # manual release button after approval
+      precheck_include_in_app_purchases: false,
+      submission_information: {
+        add_id_info_uses_idfa: false,
+        export_compliance_uses_encryption: false
+      }
+    )
+  end
+end

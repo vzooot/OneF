@@ -1,0 +1,6 @@
+{
+  "key_id": "PASTE_KEY_ID_HERE",
+  "issuer_id": "PASTE_ISSUER_ID_HERE",
+  "key_filepath": "fastlane/AuthKey_PASTE_KEY_ID_HERE.p8",
+  "in_house": false
+}

@@ -1,0 +1,3 @@
+app_identifier("com.woqomoqo.OneF")
+# Auth comes from the App Store Connect API key (see asc_key.json.example),
+# never from Apple ID passwords.

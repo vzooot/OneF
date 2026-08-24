@@ -1,0 +1,1 @@
+First release: session countdowns, 3D circuit maps, live results and standings, paddock chat, news, widgets, and Live Activities.

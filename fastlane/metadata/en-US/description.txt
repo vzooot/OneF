@@ -1,0 +1,32 @@
+OneF is a fast, beautiful companion app for motorsport race weekends.
+
+COUNTDOWN
+• Live countdown to every session of the upcoming race weekend — practice, qualifying, sprint, and race
+• Start-light gantry that fills up as race week approaches
+• Full weekend timetable in your local timezone with per-session weather forecasts
+• Broadcast-style session clock with milliseconds while a session is live
+
+THE CIRCUIT IN 3D
+• Real track shapes rendered in interactive 3D — rotate, zoom, explore
+• Corner markers, track length, direction, and pit-lane time loss
+
+RESULTS & STANDINGS
+• Podium and full classification for every completed round of the season, including sprints
+• Qualifying results with Q1/Q2/Q3 times and optional spoiler mode
+• Complete drivers' and constructors' championship standings
+
+ALWAYS ON YOUR LOCK SCREEN
+• Lock Screen and Home Screen widgets with self-updating countdowns
+• Pin a session as a Live Activity: a ticking countdown in the Dynamic Island that flips to LIVE at green light
+• Optional alerts 15 minutes before every session
+
+PADDOCK CHAT
+• A live fan chat room for every race weekend — no account or sign-up needed
+• Unique paddock names, with reporting and blocking built in
+
+NEWS
+• The latest stories from major motorsport outlets, in one feed
+
+OneF is free, collects no data, and requires no account.
+
+OneF is an independent fan app. It is not affiliated with, endorsed by, or associated with Formula 1, Formula One Group, the FIA, or any team. Race data is provided by community-maintained public sources.

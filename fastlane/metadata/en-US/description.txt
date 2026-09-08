@@ -12,8 +12,8 @@ THE CIRCUIT IN 3D
 
 RESULTS & STANDINGS
 • Podium and full classification for every completed round of the season, including sprints
-• Qualifying results with Q1/Q2/Q3 times and optional spoiler mode
-• Complete drivers' and constructors' championship standings
+• Qualifying results with session times and optional spoiler mode
+• Complete drivers' and teams' championship standings
 
 ALWAYS ON YOUR LOCK SCREEN
 • Lock Screen and Home Screen widgets with self-updating countdowns
@@ -25,8 +25,8 @@ PADDOCK CHAT
 • Unique paddock names, with reporting and blocking built in
 
 NEWS
-• The latest stories from major motorsport outlets, in one feed
+• The latest racing stories from major motorsport outlets, in one feed
 
 OneF is free, collects no data, and requires no account.
 
-OneF is an independent fan app. It is not affiliated with, endorsed by, or associated with Formula 1, Formula One Group, the FIA, or any team. Race data is provided by community-maintained public sources.
+OneF is an independent fan app. It is not affiliated with, endorsed by, or associated with any motorsport league, governing body, series organizer, or team. All race data comes from community-maintained public sources.

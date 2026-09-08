@@ -1,1 +1,1 @@
-race,countdown,grand prix,motorsport,standings,results,circuit,track,session,widget,live,formula
+race,countdown,motorsport,standings,results,circuit,track,session,widget,live,racing,speed

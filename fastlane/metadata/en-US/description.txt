@@ -1,4 +1,4 @@
-Slipstream is a fast, beautiful companion app for motorsport race weekends.
+Raceside is a fast, beautiful companion app for motorsport race weekends.
 
 COUNTDOWN
 • Live countdown to every session of the upcoming race weekend — practice, qualifying, sprint, and race
@@ -27,6 +27,6 @@ PADDOCK CHAT
 NEWS
 • The latest racing stories from major motorsport outlets, in one feed
 
-Slipstream is free, collects no data, and requires no account.
+Raceside is free, collects no data, and requires no account.
 
-Slipstream is an independent fan app. It is not affiliated with, endorsed by, or associated with any motorsport league, governing body, series organizer, or team. All race data comes from community-maintained public sources.
+Raceside is an independent fan app. It is not affiliated with, endorsed by, or associated with any motorsport league, governing body, series organizer, or team. All race data comes from community-maintained public sources.

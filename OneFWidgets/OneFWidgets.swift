@@ -199,7 +199,7 @@ struct OneFWidgetEntryView: View {
     private var inline: some View {
         switch entry.state {
         case .unavailable:
-            Text("🏁 Slipstream")
+            Text("🏁 Raceside")
         case .upcoming(_, let session):
             Text("🏁 \(session.short) in ") + Text(session.date, style: .relative)
         case .live(_, let session):
@@ -237,7 +237,7 @@ struct OneFWidgetEntryView: View {
         VStack(alignment: .leading, spacing: 1) {
             switch entry.state {
             case .unavailable:
-                Text("🏁 Slipstream")
+                Text("🏁 Raceside")
                     .font(.headline)
                 Text("No upcoming race")
                     .font(.caption2)
@@ -272,7 +272,7 @@ struct OneFWidgetEntryView: View {
         VStack(alignment: .leading, spacing: 4) {
             switch entry.state {
             case .unavailable:
-                header(flag: "🏁", title: "SLIPSTREAM", live: false)
+                header(flag: "🏁", title: "RACESIDE", live: false)
                 Spacer()
                 Text("No upcoming race")
                     .font(.system(size: 13))

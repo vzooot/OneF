@@ -3,6 +3,10 @@
   "targets" : [
     {
       "id" : "FF1C7881-F1A6-461C-98D6-481DBA71DCD8",
+      "name" : "OneF"
+    },
+    {
+      "id" : "FF1C7881-F1A6-461C-98D6-481DBA71DCD8",
       "name" : "TeamRadio"
     }
   ]

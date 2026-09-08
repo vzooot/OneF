@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" fill="#0B0B0F"/>
+  <radialGradient id="tint" cx="0.42" cy="0.55" r="0.75">
+    <stop offset="0" stop-color="#E10600" stop-opacity="0.16"/>
+    <stop offset="1" stop-color="#E10600" stop-opacity="0"/>
+  </radialGradient>
+  <rect width="1024" height="1024" fill="url(#tint)"/>
+</svg>

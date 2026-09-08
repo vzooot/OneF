@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024"><g><!-- 1-background.svg -->
+  <rect width="1024" height="1024" fill="#0B0B0F"/>
+  <radialGradient id="tint" cx="0.42" cy="0.55" r="0.75">
+    <stop offset="0" stop-color="#E10600" stop-opacity="0.16"/>
+    <stop offset="1" stop-color="#E10600" stop-opacity="0"/>
+  </radialGradient>
+  <rect width="1024" height="1024" fill="url(#tint)"/>
+</g><g><!-- 2-waves.svg -->
+  <g fill="none" stroke="#B00500" stroke-linecap="round">
+    <path d="M 318 380 A 210 210 0 0 1 318 800" stroke-width="46" opacity="0.85" transform="rotate(-8 250 590)"/>
+    <path d="M 388 300 A 330 330 0 0 1 388 880" stroke-width="40" opacity="0.6" transform="rotate(-8 250 590)"/>
+    <path d="M 458 220 A 450 450 0 0 1 458 960" stroke-width="34" opacity="0.38" transform="rotate(-8 250 590)"/>
+  </g>
+  <circle cx="196" cy="586" r="44" fill="#E10600"/>
+</g><g><!-- 3-monogram-red.svg -->
+  <text x="536" y="700" font-family="SF Pro Display, Helvetica Neue, Arial" font-size="430"
+        font-weight="900" font-style="italic" text-anchor="middle" fill="#E10600"
+        letter-spacing="-14">TR</text>
+</g><g><!-- 4-monogram-white.svg -->
+  <text x="520" y="684" font-family="SF Pro Display, Helvetica Neue, Arial" font-size="430"
+        font-weight="900" font-style="italic" text-anchor="middle" fill="#F4F4F6"
+        letter-spacing="-14">TR</text>
+</g><g><!-- 5-startlights.svg -->
+  <g fill="#E10600">
+    <circle cx="272" cy="180" r="34"/>
+    <circle cx="392" cy="180" r="34"/>
+    <circle cx="512" cy="180" r="34"/>
+    <circle cx="632" cy="180" r="34"/>
+    <circle cx="752" cy="180" r="34"/>
+  </g>
+</g><g><!-- 6-highlight.svg -->
+  <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.10"/>
+    <stop offset="0.4" stop-color="#FFFFFF" stop-opacity="0"/>
+  </linearGradient>
+  <rect width="1024" height="1024" fill="url(#sheen)"/>
+</g></svg>

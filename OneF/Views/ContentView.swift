@@ -89,9 +89,9 @@ struct HeaderView: View {
                     .frame(width: 46, height: 22)
 
                 HStack(spacing: 0) {
-                    Text("RACE")
+                    Text("TEAM")
                         .foregroundStyle(.white)
-                    Text("SIDE")
+                    Text("RADIO")
                         .foregroundStyle(Theme.f1Red)
                 }
                 .font(.f1(38).italic())

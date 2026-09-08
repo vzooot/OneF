@@ -20,8 +20,8 @@ struct AboutView: View {
                     VStack(alignment: .leading, spacing: 22) {
                         VStack(alignment: .leading, spacing: 4) {
                             HStack(spacing: 0) {
-                                Text("RACE").foregroundStyle(.white)
-                                Text("SIDE").foregroundStyle(Theme.f1Red)
+                                Text("TEAM").foregroundStyle(.white)
+                                Text("RADIO").foregroundStyle(Theme.f1Red)
                             }
                             .font(.f1(30).italic())
                             Text("VERSION \(version)")
@@ -31,7 +31,7 @@ struct AboutView: View {
                         }
 
                         section("UNOFFICIAL APP") {
-                            Text("Raceside is an independent fan project. It is not affiliated with, endorsed by, or associated in any way with Formula 1, Formula One Group, the FIA, or any team, driver, or circuit. F1, FORMULA 1, GRAND PRIX and related marks are trademarks of their respective owners and appear here only as factual references to the sport.")
+                            Text("Team Radio is an independent fan project. It is not affiliated with, endorsed by, or associated in any way with Formula 1, Formula One Group, the FIA, or any team, driver, or circuit. F1, FORMULA 1, GRAND PRIX and related marks are trademarks of their respective owners and appear here only as factual references to the sport.")
                         }
 
                         section("DATA & ACCURACY") {
@@ -59,7 +59,7 @@ struct AboutView: View {
                         }
 
                         section("APP") {
-                            Text("Raceside is open source under the MIT License. The app collects no personal data, uses no trackers, and requires no account.")
+                            Text("Team Radio is open source under the MIT License. The app collects no personal data, uses no trackers, and requires no account.")
                         }
                     }
                     .padding(.horizontal, 18)

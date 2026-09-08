@@ -1,4 +1,4 @@
-# OneF fastlane — store listing only. Building and TestFlight delivery are
+# Team Radio fastlane — store listing only. Building and TestFlight delivery are
 # Xcode Cloud's job; these lanes manage App Store Connect metadata.
 
 default_platform(:ios)

@@ -1,8 +1,8 @@
-# OneF Privacy Policy
+# Team Radio Privacy Policy
 
 _Last updated: August 22, 2026_
 
-OneF does not collect, store, or share any personal data.
+Team Radio does not collect, store, or share any personal data.
 
 - **No accounts.** The app has no sign-up, login, or user profiles.
 - **No analytics or tracking.** The app contains no analytics SDKs, no
@@ -14,9 +14,9 @@ OneF does not collect, store, or share any personal data.
   (circuit geometry), and public RSS news feeds (Formula1.com, BBC Sport,
   Motorsport.com). These requests contain no personal information beyond
   what any internet request technically includes (such as your IP address,
-  which OneF does not log or store). The operators of those services may
+  which Team Radio does not log or store). The operators of those services may
   have their own privacy policies.
-- **Notifications** are scheduled locally on your device. OneF has no
+- **Notifications** are scheduled locally on your device. Team Radio has no
   server and sends no push notifications.
 
 If you have any questions about this policy, please open an issue on the

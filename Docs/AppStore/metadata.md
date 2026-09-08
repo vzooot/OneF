@@ -7,7 +7,7 @@ already at the required 6.9" size (1320×2868).
 
 | Field | Value |
 |---|---|
-| Name | **OneF** |
+| Name | **Team Radio** |
 | Subtitle | Race countdowns & standings |
 | Bundle ID | `com.woqomoqo.OneF` |
 | SKU | `onef-ios-001` |
@@ -26,7 +26,7 @@ Note: the name and subtitle deliberately avoid "F1" and "Formula 1"
 
 ## Description
 
-> OneF is a fast, beautiful companion app for motorsport race weekends.
+> Team Radio is a fast, beautiful companion app for motorsport race weekends.
 >
 > COUNTDOWN
 > • Live countdown to every session of the upcoming race weekend — practice,
@@ -53,9 +53,9 @@ Note: the name and subtitle deliberately avoid "F1" and "Formula 1"
 > PADDOCK NEWS
 > • The latest stories from major motorsport outlets, in one feed
 >
-> OneF is free, collects no data, and requires no account.
+> Team Radio is free, collects no data, and requires no account.
 >
-> OneF is an independent fan app. It is not affiliated with, endorsed by, or
+> Team Radio is an independent fan app. It is not affiliated with, endorsed by, or
 > associated with Formula 1, Formula One Group, the FIA, or any team. Race
 > data is provided by community-maintained public sources.
 
@@ -80,7 +80,7 @@ race,countdown,grand prix,motorsport,standings,results,circuit,track,session,wid
 
 ## App Review notes (paste into the "Notes" field)
 
-> OneF is an unofficial, free fan companion app for motorsport. It is not
+> Team Radio is an unofficial, free fan companion app for motorsport. It is not
 > affiliated with Formula 1 and does not use any official F1 branding, logos,
 > or media. All data comes from public community APIs (Jolpica F1, licensed
 > CC BY-NC-SA with attribution shown in the app's About screen) and public

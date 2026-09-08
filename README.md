@@ -1,4 +1,4 @@
-# OneF 🏎️
+# Team Radio 📻🏎️
 
 **A fast, F1-broadcast-inspired iOS app: countdowns to every session of the next Grand Prix, an interactive 3D circuit map, full race results, and live paddock news.**
 
@@ -127,4 +127,4 @@ The Jolpica API also serves lap-by-lap times and pit stop data — material for 
 
 MIT — see [LICENSE](LICENSE).
 
-*OneF is an unofficial hobby project and is not associated in any way with Formula 1, the FIA, or any F1 team.*
+*Team Radio is an unofficial hobby project and is not associated in any way with Formula 1, the FIA, or any F1 team.*

@@ -199,7 +199,7 @@ struct OneFWidgetEntryView: View {
     private var inline: some View {
         switch entry.state {
         case .unavailable:
-            Text("🏁 OneF")
+            Text("🏁 Slipstream")
         case .upcoming(_, let session):
             Text("🏁 \(session.short) in ") + Text(session.date, style: .relative)
         case .live(_, let session):
@@ -237,7 +237,7 @@ struct OneFWidgetEntryView: View {
         VStack(alignment: .leading, spacing: 1) {
             switch entry.state {
             case .unavailable:
-                Text("🏁 OneF")
+                Text("🏁 Slipstream")
                     .font(.headline)
                 Text("No upcoming race")
                     .font(.caption2)
@@ -272,7 +272,7 @@ struct OneFWidgetEntryView: View {
         VStack(alignment: .leading, spacing: 4) {
             switch entry.state {
             case .unavailable:
-                header(flag: "🏁", title: "ONEF", live: false)
+                header(flag: "🏁", title: "SLIPSTREAM", live: false)
                 Spacer()
                 Text("No upcoming race")
                     .font(.system(size: 13))
@@ -402,8 +402,8 @@ struct NextSessionWidget: Widget {
         StaticConfiguration(kind: "OneFNextSession", provider: Provider()) { entry in
             OneFWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("Next F1 Session")
-        .description("Countdown to the next session of the upcoming Grand Prix.")
+        .configurationDisplayName("Next Race Session")
+        .description("Countdown to the next session of the upcoming race weekend.")
         .supportedFamilies([
             .systemSmall, .systemMedium,
             .accessoryInline, .accessoryCircular, .accessoryRectangular,

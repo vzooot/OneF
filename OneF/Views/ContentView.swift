@@ -89,12 +89,12 @@ struct HeaderView: View {
                     .frame(width: 46, height: 22)
 
                 HStack(spacing: 0) {
-                    Text("ONE")
+                    Text("SLIP")
                         .foregroundStyle(.white)
-                    Text("F")
+                    Text("STREAM")
                         .foregroundStyle(Theme.f1Red)
                 }
-                .font(.f1(40).italic())
+                .font(.f1(34).italic())
 
                 Spacer()
 

@@ -180,7 +180,7 @@ struct Provider: TimelineProvider {
 
 private let f1Red = Color(red: 0.882, green: 0.024, blue: 0.0)
 
-struct OneFWidgetEntryView: View {
+struct TeamRadioWidgetEntryView: View {
     @Environment(\.widgetFamily) private var family
     let entry: SessionEntry
 
@@ -399,8 +399,8 @@ struct OneFWidgetEntryView: View {
 
 struct NextSessionWidget: Widget {
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "OneFNextSession", provider: Provider()) { entry in
-            OneFWidgetEntryView(entry: entry)
+        StaticConfiguration(kind: "TeamRadioNextSession", provider: Provider()) { entry in
+            TeamRadioWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("Next Race Session")
         .description("Countdown to the next session of the upcoming race weekend.")
@@ -412,7 +412,7 @@ struct NextSessionWidget: Widget {
 }
 
 @main
-struct OneFWidgetsBundle: WidgetBundle {
+struct TeamRadioWidgetsBundle: WidgetBundle {
     var body: some Widget {
         NextSessionWidget()
         RaceLiveActivity()

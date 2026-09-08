@@ -77,8 +77,8 @@ All free, no keys required. OpenF1 was considered but is pay-walled during live 
 ## Architecture
 
 ```
-OneF/
-├── OneFApp.swift                   # entry point + TabView
+TeamRadio/
+├── TeamRadioApp.swift                   # entry point + TabView
 ├── Theme.swift                     # palette, typography, team colors, flags
 ├── Models/
 │   ├── F1Models.swift              # Codable models for the Ergast/Jolpica schema
@@ -115,7 +115,7 @@ OneF/
 
 ## Running it
 
-1. Open `OneF.xcodeproj` in Xcode 16 or newer
+1. Open `TeamRadio.xcodeproj` in Xcode 16 or newer
 2. Pick any iOS 17+ simulator or device
 3. `⌘R`
 

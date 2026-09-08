@@ -69,9 +69,9 @@ race,countdown,grand prix,motorsport,standings,results,circuit,track,session,wid
 
 | Field | Value |
 |---|---|
-| Support URL | https://github.com/vzooot/OneF |
+| Support URL | https://github.com/vzooot/TeamRadio |
 | Marketing URL | (optional, leave empty) |
-| Privacy Policy URL | https://github.com/vzooot/OneF/blob/main/PRIVACY.md |
+| Privacy Policy URL | https://github.com/vzooot/TeamRadio/blob/main/PRIVACY.md |
 
 ## App Privacy (questionnaire)
 
@@ -92,7 +92,7 @@ race,countdown,grand prix,motorsport,standings,results,circuit,track,session,wid
 
 1. Use a **release (non-beta) Xcode** — App Store binaries can't be built
    with beta toolchains.
-2. Open the project, select the "OneF" scheme, destination "Any iOS Device".
+2. Open the project, select the "TeamRadio" scheme, destination "Any iOS Device".
 3. Product → Archive, then Organizer → Distribute App → App Store Connect.
 4. In App Store Connect: create the app record (bundle ID
    `com.woqomoqo.OneF` appears after the first upload or can be registered

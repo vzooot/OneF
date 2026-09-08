@@ -31,7 +31,7 @@ enum LiveActivityManager {
                 content: .init(state: state, staleDate: end)
             )
         } catch {
-            NSLog("OneF LiveActivity request failed: %@", String(describing: error))
+            NSLog("TeamRadio LiveActivity request failed: %@", String(describing: error))
         }
     }
 

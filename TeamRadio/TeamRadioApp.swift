@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct OneFApp: App {
+struct TeamRadioApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()

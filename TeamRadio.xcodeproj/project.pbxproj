@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AF00002A2E00002A0000F200 /* OneFWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AF0000202E0000200000F200 /* OneFWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AF00002A2E00002A0000F200 /* TeamRadioWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AF0000202E0000200000F200 /* TeamRadioWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -16,7 +16,7 @@
 			containerPortal = AF00000A2E00000A0000F100 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = AF0000222E0000220000F200;
-			remoteInfo = OneFWidgetsExtension;
+			remoteInfo = TeamRadioWidgetsExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -27,7 +27,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				AF00002A2E00002A0000F200 /* OneFWidgetsExtension.appex in Embed Foundation Extensions */,
+				AF00002A2E00002A0000F200 /* TeamRadioWidgetsExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -35,13 +35,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		AF0000042E0000040000F100 /* OneF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneF.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		AF0000202E0000200000F200 /* OneFWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneFWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF0000042E0000040000F100 /* TeamRadio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TeamRadio.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF0000202E0000200000F200 /* TeamRadioWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TeamRadioWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		AF0000012E0000010000F100 /* OneF */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = OneF; sourceTree = "<group>"; };
-		AF0000212E0000210000F200 /* OneFWidgets */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = OneFWidgets; sourceTree = "<group>"; };
+		AF0000012E0000010000F100 /* TeamRadio */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TeamRadio; sourceTree = "<group>"; };
+		AF0000212E0000210000F200 /* TeamRadioWidgets */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TeamRadioWidgets; sourceTree = "<group>"; };
 		AF0000302E0000300000F300 /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Shared; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -66,8 +66,8 @@
 		AF0000022E0000020000F100 = {
 			isa = PBXGroup;
 			children = (
-				AF0000012E0000010000F100 /* OneF */,
-				AF0000212E0000210000F200 /* OneFWidgets */,
+				AF0000012E0000010000F100 /* TeamRadio */,
+				AF0000212E0000210000F200 /* TeamRadioWidgets */,
 				AF0000302E0000300000F300 /* Shared */,
 				AF0000032E0000030000F100 /* Products */,
 			);
@@ -76,8 +76,8 @@
 		AF0000032E0000030000F100 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AF0000042E0000040000F100 /* OneF.app */,
-				AF0000202E0000200000F200 /* OneFWidgetsExtension.appex */,
+				AF0000042E0000040000F100 /* TeamRadio.app */,
+				AF0000202E0000200000F200 /* TeamRadioWidgetsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -85,9 +85,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AF0000052E0000050000F100 /* OneF */ = {
+		AF0000052E0000050000F100 /* TeamRadio */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AF0000062E0000060000F100 /* Build configuration list for PBXNativeTarget "OneF" */;
+			buildConfigurationList = AF0000062E0000060000F100 /* Build configuration list for PBXNativeTarget "TeamRadio" */;
 			buildPhases = (
 				AF0000072E0000070000F100 /* Sources */,
 				AF0000082E0000080000F100 /* Frameworks */,
@@ -100,19 +100,19 @@
 				AF00002C2E00002C0000F200 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				AF0000012E0000010000F100 /* OneF */,
+				AF0000012E0000010000F100 /* TeamRadio */,
 				AF0000302E0000300000F300 /* Shared */,
 			);
-			name = OneF;
+			name = TeamRadio;
 			packageProductDependencies = (
 			);
-			productName = OneF;
-			productReference = AF0000042E0000040000F100 /* OneF.app */;
+			productName = TeamRadio;
+			productReference = AF0000042E0000040000F100 /* TeamRadio.app */;
 			productType = "com.apple.product-type.application";
 		};
-		AF0000222E0000220000F200 /* OneFWidgetsExtension */ = {
+		AF0000222E0000220000F200 /* TeamRadioWidgetsExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AF0000262E0000260000F200 /* Build configuration list for PBXNativeTarget "OneFWidgetsExtension" */;
+			buildConfigurationList = AF0000262E0000260000F200 /* Build configuration list for PBXNativeTarget "TeamRadioWidgetsExtension" */;
 			buildPhases = (
 				AF0000232E0000230000F200 /* Sources */,
 				AF0000242E0000240000F200 /* Frameworks */,
@@ -123,14 +123,14 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				AF0000212E0000210000F200 /* OneFWidgets */,
+				AF0000212E0000210000F200 /* TeamRadioWidgets */,
 				AF0000302E0000300000F300 /* Shared */,
 			);
-			name = OneFWidgetsExtension;
+			name = TeamRadioWidgetsExtension;
 			packageProductDependencies = (
 			);
-			productName = OneFWidgetsExtension;
-			productReference = AF0000202E0000200000F200 /* OneFWidgetsExtension.appex */;
+			productName = TeamRadioWidgetsExtension;
+			productReference = AF0000202E0000200000F200 /* TeamRadioWidgetsExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -148,7 +148,7 @@
 					};
 				};
 			};
-			buildConfigurationList = AF00000B2E00000B0000F100 /* Build configuration list for PBXProject "OneF" */;
+			buildConfigurationList = AF00000B2E00000B0000F100 /* Build configuration list for PBXProject "TeamRadio" */;
 			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -162,8 +162,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AF0000052E0000050000F100 /* OneF */,
-				AF0000222E0000220000F200 /* OneFWidgetsExtension */,
+				AF0000052E0000050000F100 /* TeamRadio */,
+				AF0000222E0000220000F200 /* TeamRadioWidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -205,7 +205,7 @@
 /* Begin PBXTargetDependency section */
 		AF00002C2E00002C0000F200 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AF0000222E0000220000F200 /* OneFWidgetsExtension */;
+			target = AF0000222E0000220000F200 /* TeamRadioWidgetsExtension */;
 			targetProxy = AF00002B2E00002B0000F200 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -325,7 +325,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = OneF/OneF.entitlements;
+				CODE_SIGN_ENTITLEMENTS = TeamRadio/TeamRadio.entitlements;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -356,7 +356,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = OneF/OneF.entitlements;
+				CODE_SIGN_ENTITLEMENTS = TeamRadio/TeamRadio.entitlements;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -432,7 +432,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AF0000062E0000060000F100 /* Build configuration list for PBXNativeTarget "OneF" */ = {
+		AF0000062E0000060000F100 /* Build configuration list for PBXNativeTarget "TeamRadio" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AF00000E2E00000E0000F100 /* Debug */,
@@ -441,7 +441,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AF00000B2E00000B0000F100 /* Build configuration list for PBXProject "OneF" */ = {
+		AF00000B2E00000B0000F100 /* Build configuration list for PBXProject "TeamRadio" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AF00000C2E00000C0000F100 /* Debug */,
@@ -450,7 +450,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AF0000262E0000260000F200 /* Build configuration list for PBXNativeTarget "OneFWidgetsExtension" */ = {
+		AF0000262E0000260000F200 /* Build configuration list for PBXNativeTarget "TeamRadioWidgetsExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AF0000272E0000270000F200 /* Debug */,

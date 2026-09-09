@@ -4,13 +4,6 @@
 
 Built entirely with SwiftUI and SceneKit — no dependencies, no packages, just one clean target.
 
-<p align="center">
-  <img src="Docs/screenshot-hero.png" width="220" alt="Session countdowns" />
-  <img src="Docs/screenshot-track.png" width="220" alt="Interactive 3D circuit map" />
-  <img src="Docs/screenshot-results.png" width="220" alt="Race results" />
-  <img src="Docs/screenshot-news.png" width="220" alt="Paddock news" />
-</p>
-
 ## Features
 
 ### 📱 Lock Screen & Home Screen widgets

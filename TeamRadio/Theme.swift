@@ -4,9 +4,9 @@ import SwiftUI
 /// neon-cyan comm ring, coral radio arc — with condensed italic type.
 enum Theme {
     /// Primary accent: the helmet's neon-cyan comm ring.
-    static let accent = Color(red: 0.22, green: 0.84, blue: 0.91)          // #38D6E8
-    /// Warm coral of the radio-wave arc: live sessions, alerts, errors.
-    static let live = Color(red: 1.0, green: 0.435, blue: 0.353)           // #FF6F5A
+    static let accent = Color(red: 0.0, green: 0.91, blue: 0.99)           // #00E8FC
+    /// Red-orange of the radio-wave arc: live sessions, alerts, errors.
+    static let live = Color(red: 0.994, green: 0.297, blue: 0.16)          // #FD4B28
     /// Text/icons placed on an accent-filled surface.
     static let onAccent = Color(red: 0.008, green: 0.051, blue: 0.071)     // #020D12
     static let background = Color(red: 0.02, green: 0.027, blue: 0.051)    // #05070D

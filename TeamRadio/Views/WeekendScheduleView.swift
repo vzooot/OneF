@@ -149,7 +149,7 @@ struct SessionRow: View {
     }
 }
 
-/// Shared section heading with a cyan slash accent.
+/// Shared section heading with a red slash accent, echoing the logo.
 struct SectionTitle: View {
     let text: String
 
@@ -158,7 +158,7 @@ struct SectionTitle: View {
     var body: some View {
         HStack(spacing: 8) {
             Rectangle()
-                .fill(Theme.accent)
+                .fill(Theme.live)
                 .frame(width: 4, height: 18)
                 .rotationEffect(.degrees(12))
             Text(text)

@@ -178,8 +178,8 @@ struct Provider: TimelineProvider {
 
 // MARK: - Widget views
 
-private let accent = Color(red: 0.22, green: 0.84, blue: 0.91)  // #38D6E8 — icon comm-ring cyan
-private let liveAccent = Color(red: 1.0, green: 0.435, blue: 0.353)  // #FF6F5A — icon radio-arc coral
+private let accent = Color(red: 0.0, green: 0.91, blue: 0.99)  // #00E8FC — icon comm-ring cyan
+private let liveAccent = Color(red: 0.994, green: 0.297, blue: 0.16)  // #FD4B28 — icon radio-arc red
 
 struct TeamRadioWidgetEntryView: View {
     @Environment(\.widgetFamily) private var family

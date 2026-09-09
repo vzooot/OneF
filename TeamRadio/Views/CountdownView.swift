@@ -239,7 +239,7 @@ struct StartLightsView: View {
                 Text(secondsRemaining < 86400 ? "FINAL 24 HOURS" : "IT'S RACE WEEK")
                     .font(.f1(11, weight: .bold))
                     .tracking(3)
-                    .foregroundStyle(Theme.accent)
+                    .foregroundStyle(Theme.live)
             }
         }
     }
@@ -248,9 +248,9 @@ struct StartLightsView: View {
         VStack(spacing: 5) {
             ForEach(0..<2, id: \.self) { _ in
                 Circle()
-                    .fill(on ? Theme.accent : Color.white.opacity(0.07))
+                    .fill(on ? Theme.live : Color.white.opacity(0.07))
                     .frame(width: 16, height: 16)
-                    .shadow(color: on ? Theme.accent.opacity(0.8) : .clear, radius: 6)
+                    .shadow(color: on ? Theme.live.opacity(0.8) : .clear, radius: 6)
             }
         }
     }

@@ -21,7 +21,7 @@ struct AboutView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             HStack(spacing: 0) {
                                 Text("TEAM").foregroundStyle(.white)
-                                Text("RADIO").foregroundStyle(Theme.f1Red)
+                                Text("RADIO").foregroundStyle(Theme.accent)
                             }
                             .font(.f1(30).italic())
                             Text("VERSION \(version)")
@@ -71,7 +71,7 @@ struct AboutView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") { dismiss() }
-                        .foregroundStyle(Theme.f1Red)
+                        .foregroundStyle(Theme.accent)
                 }
             }
         }
@@ -106,7 +106,7 @@ struct AboutView: View {
                         Text(name).font(.system(size: 14, weight: .bold))
                         Image(systemName: "arrow.up.right").font(.system(size: 10, weight: .bold))
                     }
-                    .foregroundStyle(Theme.f1Red)
+                    .foregroundStyle(Theme.accent)
                 }
             } else {
                 Text(name)

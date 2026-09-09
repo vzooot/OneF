@@ -72,7 +72,7 @@ struct CountdownView: View {
                         RoundedRectangle(cornerRadius: 20)
                             .strokeBorder(Theme.cardStroke, lineWidth: 1)
                     )
-                    .shadow(color: Theme.f1Red.opacity(0.25), radius: 24, y: 6)
+                    .shadow(color: Theme.accent.opacity(0.25), radius: 24, y: 6)
             )
         }
     }
@@ -96,12 +96,12 @@ struct CountdownView: View {
                     .font(.f1(12, weight: .bold))
                     .tracking(1)
             }
-            .foregroundStyle(pinned ? Theme.dimText : Theme.f1Red)
+            .foregroundStyle(pinned ? Theme.dimText : Theme.accent)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 9)
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
-                    .strokeBorder(pinned ? Theme.cardStroke : Theme.f1Red.opacity(0.5), lineWidth: 1)
+                    .strokeBorder(pinned ? Theme.cardStroke : Theme.accent.opacity(0.5), lineWidth: 1)
             )
         }
         .buttonStyle(.plain)
@@ -121,7 +121,7 @@ struct CountdownView: View {
                         .padding(.vertical, 7)
                         .background(
                             RoundedRectangle(cornerRadius: 8)
-                                .fill(isSelected ? Theme.f1Red : Color.white.opacity(0.06))
+                                .fill(isSelected ? Theme.accent : Color.white.opacity(0.06))
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
@@ -142,9 +142,9 @@ struct CountdownView: View {
     private func liveBanner(_ session: WeekendSession) -> some View {
         HStack(spacing: 10) {
             Circle()
-                .fill(Theme.f1Red)
+                .fill(Theme.live)
                 .frame(width: 10, height: 10)
-                .shadow(color: Theme.f1Red, radius: 6)
+                .shadow(color: Theme.live, radius: 6)
             Text("\(session.kind.rawValue.uppercased()) IS LIVE")
                 .font(.f1(22).italic())
                 .foregroundStyle(.white)
@@ -157,7 +157,7 @@ struct CountdownView: View {
         VStack(spacing: 4) {
             Text(String(format: "%02d", value))
                 .font(.f1Digits(42))
-                .foregroundStyle(hot ? Theme.f1Red : .white)
+                .foregroundStyle(hot ? Theme.accent : .white)
                 .contentTransition(.numericText(countsDown: true))
                 .animation(.snappy(duration: 0.3), value: value)
             Text(label)
@@ -172,7 +172,7 @@ struct CountdownView: View {
                 .fill(Color.black.opacity(0.45))
                 .overlay(
                     RoundedRectangle(cornerRadius: 14)
-                        .strokeBorder(hot ? Theme.f1Red.opacity(0.5) : Theme.cardStroke, lineWidth: 1)
+                        .strokeBorder(hot ? Theme.accent.opacity(0.5) : Theme.cardStroke, lineWidth: 1)
                 )
         )
     }
@@ -239,7 +239,7 @@ struct StartLightsView: View {
                 Text(secondsRemaining < 86400 ? "FINAL 24 HOURS" : "IT'S RACE WEEK")
                     .font(.f1(11, weight: .bold))
                     .tracking(3)
-                    .foregroundStyle(Theme.f1Red)
+                    .foregroundStyle(Theme.accent)
             }
         }
     }
@@ -248,9 +248,9 @@ struct StartLightsView: View {
         VStack(spacing: 5) {
             ForEach(0..<2, id: \.self) { _ in
                 Circle()
-                    .fill(on ? Theme.f1Red : Color.white.opacity(0.07))
+                    .fill(on ? Theme.accent : Color.white.opacity(0.07))
                     .frame(width: 16, height: 16)
-                    .shadow(color: on ? Theme.f1Red.opacity(0.8) : .clear, radius: 6)
+                    .shadow(color: on ? Theme.accent.opacity(0.8) : .clear, radius: 6)
             }
         }
     }

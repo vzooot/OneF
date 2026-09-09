@@ -1,11 +1,17 @@
 import SwiftUI
 
-/// Visual language of the app: F1-broadcast dark palette, condensed italic type.
+/// Visual language of the app: dark cockpit palette drawn from the app icon —
+/// neon-cyan comm ring, coral radio arc — with condensed italic type.
 enum Theme {
-    static let f1Red = Color(red: 0.882, green: 0.024, blue: 0.0)          // #E10600
-    static let background = Color(red: 0.043, green: 0.043, blue: 0.059)   // #0B0B0F
-    static let card = Color(red: 0.086, green: 0.086, blue: 0.11)          // #16161C
-    static let cardStroke = Color.white.opacity(0.08)
+    /// Primary accent: the helmet's neon-cyan comm ring.
+    static let accent = Color(red: 0.22, green: 0.84, blue: 0.91)          // #38D6E8
+    /// Warm coral of the radio-wave arc: live sessions, alerts, errors.
+    static let live = Color(red: 1.0, green: 0.435, blue: 0.353)           // #FF6F5A
+    /// Text/icons placed on an accent-filled surface.
+    static let onAccent = Color(red: 0.008, green: 0.051, blue: 0.071)     // #020D12
+    static let background = Color(red: 0.02, green: 0.027, blue: 0.051)    // #05070D
+    static let card = Color(red: 0.063, green: 0.082, blue: 0.129)         // #101521
+    static let cardStroke = Color(red: 0.6, green: 0.9, blue: 1.0).opacity(0.1)
     static let dimText = Color.white.opacity(0.55)
     static let faintText = Color.white.opacity(0.35)
 

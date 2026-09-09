@@ -38,7 +38,7 @@ struct ResultsView: View {
             Theme.background.ignoresSafeArea()
 
             RadialGradient(
-                colors: [Theme.f1Red.opacity(0.14), .clear],
+                colors: [Theme.accent.opacity(0.14), .clear],
                 center: .top, startRadius: 0, endRadius: 380
             )
             .ignoresSafeArea()
@@ -65,7 +65,7 @@ struct ResultsView: View {
         VStack(spacing: 8) {
             Image(systemName: "eye.slash.fill")
                 .font(.system(size: 28))
-                .foregroundStyle(Theme.f1Red)
+                .foregroundStyle(Theme.accent)
             Text("SPOILERS HIDDEN")
                 .font(.f1(17).italic())
                 .foregroundStyle(.white)
@@ -113,7 +113,7 @@ struct ResultsView: View {
                     .opacity(model.isSwitching ? 0.35 : 1)
                     .overlay {
                         if model.isSwitching {
-                            ProgressView().tint(Theme.f1Red)
+                            ProgressView().tint(Theme.accent)
                         }
                     }
                     .animation(.easeInOut(duration: 0.2), value: model.isSwitching)
@@ -213,12 +213,12 @@ struct ResultsView: View {
             } label: {
                 Image(systemName: spoilerMode ? "eye.slash.fill" : "eye")
                     .font(.system(size: 17))
-                    .foregroundStyle(spoilerMode ? Theme.f1Red : Theme.dimText)
+                    .foregroundStyle(spoilerMode ? Theme.accent : Theme.dimText)
                     .padding(8)
                     .background(
                         Circle()
                             .fill(Color.white.opacity(0.05))
-                            .overlay(Circle().strokeBorder(spoilerMode ? Theme.f1Red.opacity(0.5) : Theme.cardStroke, lineWidth: 1))
+                            .overlay(Circle().strokeBorder(spoilerMode ? Theme.accent.opacity(0.5) : Theme.cardStroke, lineWidth: 1))
                     )
             }
             .buttonStyle(.plain)
@@ -239,7 +239,7 @@ struct ResultsView: View {
                             VStack(spacing: 2) {
                                 Text("\(Flags.emoji(for: race.circuit.location.country)) R\(race.roundNumber)")
                                     .font(.f1(13).italic())
-                                    .foregroundStyle(isSelected ? Theme.f1Red : .white)
+                                    .foregroundStyle(isSelected ? Theme.accent : .white)
                                 Text(race.circuit.location.locality.uppercased())
                                     .font(.f1(10, weight: .bold))
                                     .foregroundStyle(isSelected ? .white : Theme.dimText)
@@ -249,10 +249,10 @@ struct ResultsView: View {
                             .padding(.vertical, 7)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(isSelected ? Theme.f1Red.opacity(0.15) : Theme.card)
+                                    .fill(isSelected ? Theme.accent.opacity(0.15) : Theme.card)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 10)
-                                            .strokeBorder(isSelected ? Theme.f1Red : Theme.cardStroke, lineWidth: isSelected ? 1.5 : 1)
+                                            .strokeBorder(isSelected ? Theme.accent : Theme.cardStroke, lineWidth: isSelected ? 1.5 : 1)
                                     )
                             )
                         }
@@ -280,12 +280,12 @@ struct ResultsView: View {
                     Text(candidate.rawValue)
                         .font(.f1(14).italic())
                         .tracking(1)
-                        .foregroundStyle(isSelected ? .white : Theme.dimText)
+                        .foregroundStyle(isSelected ? Theme.onAccent : Theme.dimText)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 9)
                         .background(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(isSelected ? Theme.f1Red : Color.white.opacity(0.06))
+                                .fill(isSelected ? Theme.accent : Color.white.opacity(0.06))
                         )
                 }
                 .buttonStyle(.plain)
@@ -315,7 +315,7 @@ struct PodiumView: View {
             RoundedRectangle(cornerRadius: 20)
                 .fill(
                     LinearGradient(
-                        colors: [Theme.card, Theme.f1Red.opacity(0.16)],
+                        colors: [Theme.card, Theme.accent.opacity(0.16)],
                         startPoint: .top, endPoint: .bottom
                     )
                 )
@@ -355,7 +355,7 @@ struct PodiumView: View {
                     .padding(.top, 6)
                 Text(result.position)
                     .font(.f1Digits(34))
-                    .foregroundStyle(result.position == "1" ? Theme.f1Red : .white)
+                    .foregroundStyle(result.position == "1" ? Theme.accent : .white)
                     .padding(.top, 14)
             }
             .frame(height: height)
@@ -431,7 +431,7 @@ struct RaceResultRow: View {
         HStack(spacing: 10) {
             Text(result.positionText)
                 .font(.f1Digits(17))
-                .foregroundStyle(result.position == "1" ? Theme.f1Red : (result.finished ? .white : Theme.faintText))
+                .foregroundStyle(result.position == "1" ? Theme.accent : (result.finished ? .white : Theme.faintText))
                 .frame(width: 28, alignment: .center)
 
             RoundedRectangle(cornerRadius: 2)
@@ -460,7 +460,7 @@ struct RaceResultRow: View {
             VStack(alignment: .trailing, spacing: 1) {
                 Text(result.gapText)
                     .font(.system(size: 13, weight: .bold).monospacedDigit())
-                    .foregroundStyle(result.finished ? .white : Theme.f1Red.opacity(0.85))
+                    .foregroundStyle(result.finished ? .white : Theme.accent.opacity(0.85))
                     .lineLimit(1)
                 if let pts = Double(result.points), pts > 0 {
                     Text("+\(result.points) PTS")
@@ -520,7 +520,7 @@ struct QualifyingResultRow: View {
         HStack(spacing: 10) {
             Text(result.position)
                 .font(.f1Digits(17))
-                .foregroundStyle(result.position == "1" ? Theme.f1Red : .white)
+                .foregroundStyle(result.position == "1" ? Theme.accent : .white)
                 .frame(width: 28, alignment: .center)
 
             RoundedRectangle(cornerRadius: 2)
@@ -542,7 +542,7 @@ struct QualifyingResultRow: View {
                 VStack(alignment: .trailing, spacing: 1) {
                     Text(best.time)
                         .font(.system(size: 13, weight: .bold).monospacedDigit())
-                        .foregroundStyle(result.position == "1" ? Theme.f1Red : .white)
+                        .foregroundStyle(result.position == "1" ? Theme.accent : .white)
                     Text(best.segment)
                         .font(.system(size: 10, weight: .semibold))
                         .foregroundStyle(Theme.dimText)
@@ -572,7 +572,7 @@ struct ConstructorStandingsView: View {
                     HStack(spacing: 12) {
                         Text(entry.position)
                             .font(.f1Digits(18))
-                            .foregroundStyle(entry.position == "1" ? Theme.f1Red : .white)
+                            .foregroundStyle(entry.position == "1" ? Theme.accent : .white)
                             .frame(width: 28, alignment: .center)
 
                         RoundedRectangle(cornerRadius: 2)
@@ -588,7 +588,7 @@ struct ConstructorStandingsView: View {
                         VStack(alignment: .trailing, spacing: 1) {
                             Text("\(entry.points) PTS")
                                 .font(.f1Digits(15))
-                                .foregroundStyle(entry.position == "1" ? Theme.f1Red : .white)
+                                .foregroundStyle(entry.position == "1" ? Theme.accent : .white)
                             if let wins = Int(entry.wins), wins > 0 {
                                 Text("\(wins) \(wins == 1 ? "WIN" : "WINS")")
                                     .font(.system(size: 10, weight: .semibold))

@@ -47,7 +47,7 @@ struct RoundCard: View {
 
             Text("R\(race.roundNumber)")
                 .font(.f1(13).italic())
-                .foregroundStyle(isNext ? Theme.f1Red : Theme.dimText)
+                .foregroundStyle(isNext ? Theme.accent : Theme.dimText)
 
             Text(race.circuit.location.locality.uppercased())
                 .font(.f1(12, weight: .bold))
@@ -60,17 +60,17 @@ struct RoundCard: View {
             } else if let start = race.startDate {
                 Text(start.formatted(.dateTime.day().month(.abbreviated)).uppercased())
                     .font(.system(size: 10, weight: .semibold))
-                    .foregroundStyle(isNext ? Theme.f1Red : Theme.dimText)
+                    .foregroundStyle(isNext ? Theme.accent : Theme.dimText)
             }
         }
         .frame(width: 92)
         .padding(.vertical, 12)
         .background(
             RoundedRectangle(cornerRadius: 14)
-                .fill(isNext ? Theme.f1Red.opacity(0.12) : Theme.card)
+                .fill(isNext ? Theme.accent.opacity(0.12) : Theme.card)
                 .overlay(
                     RoundedRectangle(cornerRadius: 14)
-                        .strokeBorder(isNext ? Theme.f1Red : Theme.cardStroke, lineWidth: isNext ? 1.5 : 1)
+                        .strokeBorder(isNext ? Theme.accent : Theme.cardStroke, lineWidth: isNext ? 1.5 : 1)
                 )
         )
         .opacity(isPast ? 0.6 : 1)

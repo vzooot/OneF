@@ -9,7 +9,7 @@ struct ContentView: View {
             Theme.background.ignoresSafeArea()
 
             RadialGradient(
-                colors: [Theme.f1Red.opacity(0.18), .clear],
+                colors: [Theme.accent.opacity(0.18), .clear],
                 center: .top, startRadius: 0, endRadius: 420
             )
             .ignoresSafeArea()
@@ -84,17 +84,14 @@ struct HeaderView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             HStack(spacing: 10) {
-                SpeedLines()
-                    .fill(Theme.f1Red)
-                    .frame(width: 46, height: 22)
-
-                HStack(spacing: 0) {
-                    Text("TEAM")
-                        .foregroundStyle(.white)
-                    Text("RADIO")
-                        .foregroundStyle(Theme.f1Red)
-                }
-                .font(.f1(38).italic())
+                Image("HeaderLogo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 58)
+                    // Screen blend melts the banner's black ground into the
+                    // page gradient, leaving only the glowing artwork.
+                    .blendMode(.screen)
+                    .accessibilityLabel("Team Radio")
 
                 Spacer()
 
@@ -111,27 +108,9 @@ struct HeaderView: View {
                 .font(.f1(13, weight: .semibold))
                 .tracking(4)
                 .foregroundStyle(Theme.dimText)
-                .padding(.leading, 56)
+                .padding(.leading, 8)
         }
         .padding(.top, 4)
-    }
-}
-
-/// The three trailing speed strokes from the F1 wordmark, drawn as skewed bars.
-struct SpeedLines: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        let bar = rect.width / 5.5
-        let skew = rect.height * 0.55
-        for i in 0..<3 {
-            let x = CGFloat(i) * bar * 1.8
-            path.move(to: CGPoint(x: x + skew, y: 0))
-            path.addLine(to: CGPoint(x: x + skew + bar, y: 0))
-            path.addLine(to: CGPoint(x: x + bar, y: rect.height))
-            path.addLine(to: CGPoint(x: x, y: rect.height))
-            path.closeSubpath()
-        }
-        return path
     }
 }
 
@@ -172,10 +151,10 @@ struct ErrorView: View {
                 Text("RESTART RACE")
                     .font(.f1(15).italic())
                     .tracking(2)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Theme.onAccent)
                     .padding(.horizontal, 24)
                     .padding(.vertical, 12)
-                    .background(Theme.f1Red, in: RoundedRectangle(cornerRadius: 10))
+                    .background(Theme.accent, in: RoundedRectangle(cornerRadius: 10))
             }
         }
         .padding(32)
@@ -209,7 +188,7 @@ struct SessionAlertsCard: View {
         HStack(spacing: 12) {
             Image(systemName: enabled ? "bell.badge.fill" : "bell.slash")
                 .font(.system(size: 20))
-                .foregroundStyle(enabled ? Theme.f1Red : Theme.dimText)
+                .foregroundStyle(enabled ? Theme.accent : Theme.dimText)
                 .frame(width: 30)
 
             VStack(alignment: .leading, spacing: 2) {
@@ -225,7 +204,7 @@ struct SessionAlertsCard: View {
 
             Toggle("", isOn: $enabled)
                 .labelsHidden()
-                .tint(Theme.f1Red)
+                .tint(Theme.accent)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
@@ -297,11 +276,11 @@ struct LiveSessionBanner: View {
                     RoundedRectangle(cornerRadius: 18)
                         .fill(
                             LinearGradient(
-                                colors: [Theme.f1Red, Color(red: 0.6, green: 0.0, blue: 0.05)],
+                                colors: [Theme.live, Color(red: 0.55, green: 0.12, blue: 0.07)],
                                 startPoint: .leading, endPoint: .trailing
                             )
                         )
-                        .shadow(color: Theme.f1Red.opacity(0.55), radius: 18, y: 4)
+                        .shadow(color: Theme.live.opacity(0.55), radius: 18, y: 4)
                 )
                 .onAppear { pulse = true }
             }

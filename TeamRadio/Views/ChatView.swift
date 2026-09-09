@@ -14,7 +14,7 @@ struct ChatView: View {
             Theme.background.ignoresSafeArea()
 
             RadialGradient(
-                colors: [Theme.f1Red.opacity(0.14), .clear],
+                colors: [Theme.accent.opacity(0.14), .clear],
                 center: .top, startRadius: 0, endRadius: 380
             )
             .ignoresSafeArea()
@@ -75,10 +75,10 @@ struct ChatView: View {
                 Text("I AGREE — LET ME IN")
                     .font(.f1(15).italic())
                     .tracking(1)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Theme.onAccent)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 13)
-                    .background(Theme.f1Red, in: RoundedRectangle(cornerRadius: 12))
+                    .background(Theme.accent, in: RoundedRectangle(cornerRadius: 12))
             }
             .buttonStyle(.plain)
             .padding(.top, 6)
@@ -118,7 +118,7 @@ struct ChatView: View {
             if let error = model.nicknameError {
                 Text(error)
                     .font(.system(size: 12))
-                    .foregroundStyle(Theme.f1Red)
+                    .foregroundStyle(Theme.live)
             }
 
             Button {
@@ -130,17 +130,19 @@ struct ChatView: View {
             } label: {
                 HStack(spacing: 8) {
                     if model.isClaimingName {
-                        ProgressView().tint(.white)
+                        ProgressView().tint(Theme.onAccent)
                     }
                     Text(editingName ? "REGISTER NAME" : "JOIN THE PADDOCK")
                         .font(.f1(15).italic())
                         .tracking(1)
                 }
-                .foregroundStyle(.white)
+                .foregroundStyle(
+                    nicknameDraft.trimmingCharacters(in: .whitespaces).count >= 3 ? Theme.onAccent : Theme.dimText
+                )
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 13)
                 .background(
-                    nicknameDraft.trimmingCharacters(in: .whitespaces).count >= 3 ? Theme.f1Red : Color.gray.opacity(0.3),
+                    nicknameDraft.trimmingCharacters(in: .whitespaces).count >= 3 ? Theme.accent : Color.gray.opacity(0.3),
                     in: RoundedRectangle(cornerRadius: 12)
                 )
             }
@@ -193,7 +195,7 @@ struct ChatView: View {
                     HStack(spacing: 5) {
                         Text(model.nickname)
                             .font(.f1(13).italic())
-                            .foregroundStyle(Theme.f1Red)
+                            .foregroundStyle(Theme.accent)
                             .lineLimit(1)
                         Image(systemName: "pencil")
                             .font(.system(size: 11, weight: .bold))
@@ -280,7 +282,7 @@ struct ChatView: View {
             if let error = model.errorText {
                 Text(error)
                     .font(.system(size: 11))
-                    .foregroundStyle(Theme.f1Red.opacity(0.9))
+                    .foregroundStyle(Theme.live.opacity(0.9))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
                     .padding(.top, 4)
@@ -314,7 +316,7 @@ struct ChatView: View {
             } label: {
                 Image(systemName: "arrow.up.circle.fill")
                     .font(.system(size: 30))
-                    .foregroundStyle(draft.trimmingCharacters(in: .whitespaces).isEmpty ? Theme.dimText : Theme.f1Red)
+                    .foregroundStyle(draft.trimmingCharacters(in: .whitespaces).isEmpty ? Theme.dimText : Theme.accent)
             }
             .buttonStyle(.plain)
             .disabled(draft.trimmingCharacters(in: .whitespaces).isEmpty || model.isSending)
@@ -333,7 +335,7 @@ struct ChatBubble: View {
             HStack(spacing: 6) {
                 Text(message.sender)
                     .font(.f1(12).italic())
-                    .foregroundStyle(isMine ? Theme.f1Red : .white.opacity(0.8))
+                    .foregroundStyle(isMine ? Theme.accent : .white.opacity(0.8))
                 Text(message.date.formatted(date: .omitted, time: .shortened))
                     .font(.system(size: 10))
                     .foregroundStyle(Theme.faintText)
@@ -345,10 +347,10 @@ struct ChatBubble: View {
                 .padding(.vertical, 8)
                 .background(
                     RoundedRectangle(cornerRadius: 14)
-                        .fill(isMine ? Theme.f1Red.opacity(0.25) : Theme.card)
+                        .fill(isMine ? Theme.accent.opacity(0.25) : Theme.card)
                         .overlay(
                             RoundedRectangle(cornerRadius: 14)
-                                .strokeBorder(isMine ? Theme.f1Red.opacity(0.4) : Theme.cardStroke, lineWidth: 1)
+                                .strokeBorder(isMine ? Theme.accent.opacity(0.4) : Theme.cardStroke, lineWidth: 1)
                         )
                 )
         }

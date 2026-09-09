@@ -9,7 +9,7 @@ struct RaceHeroView: View {
             RoundedRectangle(cornerRadius: 20)
                 .fill(
                     LinearGradient(
-                        colors: [Theme.card, Theme.f1Red.opacity(0.22)],
+                        colors: [Theme.card, Theme.accent.opacity(0.22)],
                         startPoint: .topLeading, endPoint: .bottomTrailing
                     )
                 )
@@ -31,10 +31,10 @@ struct RaceHeroView: View {
                     Text("ROUND \(race.roundNumber)")
                         .font(.f1(13).italic())
                         .tracking(1)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(Theme.onAccent)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
-                        .background(Theme.f1Red, in: RoundedRectangle(cornerRadius: 7))
+                        .background(Theme.accent, in: RoundedRectangle(cornerRadius: 7))
 
                     if race.isSprintWeekend {
                         Text("SPRINT")

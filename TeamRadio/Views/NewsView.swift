@@ -10,7 +10,7 @@ struct NewsView: View {
             Theme.background.ignoresSafeArea()
 
             RadialGradient(
-                colors: [Theme.f1Red.opacity(0.14), .clear],
+                colors: [Theme.accent.opacity(0.14), .clear],
                 center: .top, startRadius: 0, endRadius: 380
             )
             .ignoresSafeArea()
@@ -64,7 +64,7 @@ struct NewsCard: View {
 
     private var sourceColor: Color {
         switch item.source {
-        case "Formula1.com": Theme.f1Red
+        case "Formula1.com": Theme.accent
         case "BBC Sport": Color(red: 1.0, green: 0.82, blue: 0.0)
         default: Color(red: 1.0, green: 0.35, blue: 0.0)
         }

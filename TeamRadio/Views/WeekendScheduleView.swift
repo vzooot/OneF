@@ -81,7 +81,7 @@ struct SessionRow: View {
                 .frame(width: 46, height: 26)
                 .background(
                     RoundedRectangle(cornerRadius: 7)
-                        .fill(session.kind == .race ? Theme.f1Red : Color.white.opacity(0.06))
+                        .fill(session.kind == .race ? Theme.accent : Color.white.opacity(0.06))
                 )
 
             VStack(alignment: .leading, spacing: 1) {
@@ -99,24 +99,24 @@ struct SessionRow: View {
             if isLive {
                 HStack(spacing: 5) {
                     Circle()
-                        .fill(Theme.f1Red)
+                        .fill(Theme.live)
                         .frame(width: 7, height: 7)
-                        .shadow(color: Theme.f1Red, radius: 4)
+                        .shadow(color: Theme.live, radius: 4)
                     Text("LIVE")
                         .font(.f1(10, weight: .heavy))
                         .tracking(1)
-                        .foregroundStyle(Theme.f1Red)
+                        .foregroundStyle(Theme.live)
                 }
             } else if let countdown = miniCountdown, isNext {
                 Text(countdown)
                     .font(.f1(10, weight: .heavy).monospacedDigit())
                     .tracking(1)
-                    .foregroundStyle(Theme.f1Red)
+                    .foregroundStyle(Theme.accent)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 3)
                     .overlay(
                         RoundedRectangle(cornerRadius: 5)
-                            .strokeBorder(Theme.f1Red.opacity(0.6), lineWidth: 1)
+                            .strokeBorder(Theme.accent.opacity(0.6), lineWidth: 1)
                     )
             } else if let countdown = miniCountdown {
                 Text(countdown)
@@ -138,18 +138,18 @@ struct SessionRow: View {
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 11)
-        .background(isNext ? Theme.f1Red.opacity(0.08) : .clear)
+        .background(isNext ? Theme.accent.opacity(0.08) : .clear)
         .overlay(alignment: .leading) {
             if isNext {
                 Rectangle()
-                    .fill(Theme.f1Red)
+                    .fill(Theme.accent)
                     .frame(width: 3)
             }
         }
     }
 }
 
-/// Shared section heading with a red slash accent.
+/// Shared section heading with a cyan slash accent.
 struct SectionTitle: View {
     let text: String
 
@@ -158,7 +158,7 @@ struct SectionTitle: View {
     var body: some View {
         HStack(spacing: 8) {
             Rectangle()
-                .fill(Theme.f1Red)
+                .fill(Theme.accent)
                 .frame(width: 4, height: 18)
                 .rotationEffect(.degrees(12))
             Text(text)

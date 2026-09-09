@@ -178,7 +178,8 @@ struct Provider: TimelineProvider {
 
 // MARK: - Widget views
 
-private let f1Red = Color(red: 0.882, green: 0.024, blue: 0.0)
+private let accent = Color(red: 0.22, green: 0.84, blue: 0.91)  // #38D6E8 — icon comm-ring cyan
+private let liveAccent = Color(red: 1.0, green: 0.435, blue: 0.353)  // #FF6F5A — icon radio-arc coral
 
 struct TeamRadioWidgetEntryView: View {
     @Environment(\.widgetFamily) private var family
@@ -282,7 +283,7 @@ struct TeamRadioWidgetEntryView: View {
                 Spacer()
                 Text(session.name.uppercased())
                     .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(f1Red)
+                    .foregroundStyle(accent)
                 Text(session.date, style: .relative)
                     .font(.system(size: 21, weight: .black, design: .default).width(.condensed).monospacedDigit())
                     .foregroundStyle(.white)
@@ -299,7 +300,7 @@ struct TeamRadioWidgetEntryView: View {
                     .foregroundStyle(.white)
                 Text("LIVE NOW")
                     .font(.system(size: 22, weight: .black).width(.condensed))
-                    .foregroundStyle(f1Red)
+                    .foregroundStyle(liveAccent)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -323,7 +324,7 @@ struct TeamRadioWidgetEntryView: View {
                 VStack(alignment: .trailing, spacing: 2) {
                     Text(session.name.uppercased())
                         .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(f1Red)
+                        .foregroundStyle(accent)
                     Text(session.date, style: .relative)
                         .font(.system(size: 24, weight: .black).width(.condensed).monospacedDigit())
                         .foregroundStyle(.white)
@@ -347,7 +348,7 @@ struct TeamRadioWidgetEntryView: View {
                         .foregroundStyle(.white)
                     Text("LIVE")
                         .font(.system(size: 26, weight: .black).width(.condensed))
-                        .foregroundStyle(f1Red)
+                        .foregroundStyle(liveAccent)
                 }
             }
         }
@@ -366,7 +367,7 @@ struct TeamRadioWidgetEntryView: View {
                 .minimumScaleFactor(0.7)
             if live {
                 Circle()
-                    .fill(f1Red)
+                    .fill(liveAccent)
                     .frame(width: 8, height: 8)
             }
         }
@@ -374,12 +375,12 @@ struct TeamRadioWidgetEntryView: View {
 
     private var widgetBackground: some View {
         LinearGradient(
-            colors: [Color(red: 0.07, green: 0.04, blue: 0.05), Color(red: 0.043, green: 0.043, blue: 0.059)],
+            colors: [Color(red: 0.03, green: 0.06, blue: 0.10), Color(red: 0.02, green: 0.027, blue: 0.051)],
             startPoint: .topLeading, endPoint: .bottomTrailing
         )
         .overlay(alignment: .topTrailing) {
             Circle()
-                .fill(f1Red.opacity(0.25))
+                .fill(accent.opacity(0.25))
                 .frame(width: 110, height: 110)
                 .blur(radius: 40)
                 .offset(x: 30, y: -30)

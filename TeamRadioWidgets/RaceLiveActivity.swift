@@ -5,12 +5,13 @@ import SwiftUI
 /// Wolt-style live tracking: the pinned session countdown on the Lock Screen
 /// and in the Dynamic Island, flipping to LIVE at lights out.
 struct RaceLiveActivity: Widget {
-    private let f1Red = Color(red: 0.882, green: 0.024, blue: 0.0)
+    private let accent = Color(red: 0.22, green: 0.84, blue: 0.91)  // #38D6E8 — icon comm-ring cyan
+    private let liveAccent = Color(red: 1.0, green: 0.435, blue: 0.353)  // #FF6F5A — icon radio-arc coral
 
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: RaceActivityAttributes.self) { context in
             lockScreenView(context)
-                .activityBackgroundTint(Color(red: 0.05, green: 0.05, blue: 0.07))
+                .activityBackgroundTint(Color(red: 0.02, green: 0.03, blue: 0.055))
                 .activitySystemActionForegroundColor(.white)
         } dynamicIsland: { context in
             DynamicIsland {
@@ -23,10 +24,10 @@ struct RaceLiveActivity: Widget {
                     if context.state.isLive {
                         Text("LIVE")
                             .font(.system(size: 15, weight: .black))
-                            .foregroundStyle(f1Red)
+                            .foregroundStyle(liveAccent)
                     } else {
                         countdownText(to: context.state.sessionDate, size: 15)
-                            .foregroundStyle(f1Red)
+                            .foregroundStyle(accent)
                             .frame(maxWidth: 80)
                     }
                 }
@@ -46,7 +47,7 @@ struct RaceLiveActivity: Widget {
             } compactLeading: {
                 if context.state.isLive {
                     Circle()
-                        .fill(f1Red)
+                        .fill(liveAccent)
                         .frame(width: 10, height: 10)
                 } else {
                     Text("🏁")
@@ -55,22 +56,22 @@ struct RaceLiveActivity: Widget {
                 if context.state.isLive {
                     Text("LIVE")
                         .font(.system(size: 12, weight: .black))
-                        .foregroundStyle(f1Red)
+                        .foregroundStyle(liveAccent)
                 } else {
                     countdownText(to: context.state.sessionDate, size: 12)
-                        .foregroundStyle(f1Red)
+                        .foregroundStyle(accent)
                         .frame(maxWidth: 60)
                 }
             } minimal: {
                 if context.state.isLive {
                     Circle()
-                        .fill(f1Red)
+                        .fill(liveAccent)
                         .frame(width: 10, height: 10)
                 } else {
                     Text("🏁")
                 }
             }
-            .keylineTint(f1Red)
+            .keylineTint(accent)
         }
     }
 
@@ -104,7 +105,7 @@ struct RaceLiveActivity: Widget {
                 }
                 Text(context.attributes.sessionName.uppercased())
                     .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(f1Red)
+                    .foregroundStyle(accent)
             }
 
             Spacer()
@@ -112,11 +113,11 @@ struct RaceLiveActivity: Widget {
             if context.state.isLive {
                 HStack(spacing: 7) {
                     Circle()
-                        .fill(f1Red)
+                        .fill(liveAccent)
                         .frame(width: 10, height: 10)
                     Text("LIVE")
                         .font(.system(size: 24, weight: .black).width(.condensed))
-                        .foregroundStyle(f1Red)
+                        .foregroundStyle(liveAccent)
                 }
             } else {
                 VStack(alignment: .trailing, spacing: 0) {

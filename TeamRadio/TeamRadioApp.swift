@@ -26,7 +26,7 @@ struct RootView: View {
             NewsView()
                 .tabItem { Label("News", systemImage: "newspaper.fill") }
         }
-        .tint(Theme.f1Red)
+        .tint(Theme.accent)
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 LiveActivityManager.refresh()

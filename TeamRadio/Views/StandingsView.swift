@@ -37,7 +37,7 @@ struct StandingRow: View {
         HStack(spacing: 12) {
             Text(entry.position)
                 .font(.f1Digits(20))
-                .foregroundStyle(isLeader ? Theme.f1Red : .white)
+                .foregroundStyle(isLeader ? Theme.accent : .white)
                 .frame(width: 30, alignment: .center)
 
             RoundedRectangle(cornerRadius: 2)
@@ -64,7 +64,7 @@ struct StandingRow: View {
             VStack(alignment: .trailing, spacing: 1) {
                 Text("\(entry.points) PTS")
                     .font(.f1Digits(16))
-                    .foregroundStyle(isLeader ? Theme.f1Red : .white)
+                    .foregroundStyle(isLeader ? Theme.accent : .white)
                 if let wins = Int(entry.wins), wins > 0 {
                     Text("\(wins) \(wins == 1 ? "WIN" : "WINS")")
                         .font(.system(size: 10, weight: .semibold))

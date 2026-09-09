@@ -15,7 +15,7 @@ struct StandingsTabView: View {
             Theme.background.ignoresSafeArea()
 
             RadialGradient(
-                colors: [Theme.f1Red.opacity(0.14), .clear],
+                colors: [Theme.accent.opacity(0.14), .clear],
                 center: .top, startRadius: 0, endRadius: 380
             )
             .ignoresSafeArea()
@@ -72,12 +72,12 @@ struct StandingsTabView: View {
                     Text(candidate.rawValue)
                         .font(.f1(14).italic())
                         .tracking(1)
-                        .foregroundStyle(isSelected ? .white : Theme.dimText)
+                        .foregroundStyle(isSelected ? Theme.onAccent : Theme.dimText)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 9)
                         .background(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(isSelected ? Theme.f1Red : Color.white.opacity(0.06))
+                                .fill(isSelected ? Theme.accent : Color.white.opacity(0.06))
                         )
                 }
                 .buttonStyle(.plain)
@@ -142,7 +142,7 @@ struct FullDriverRow: View {
         HStack(spacing: 12) {
             Text(entry.position)
                 .font(.f1Digits(18))
-                .foregroundStyle(entry.position == "1" ? Theme.f1Red : .white)
+                .foregroundStyle(entry.position == "1" ? Theme.accent : .white)
                 .frame(width: 30, alignment: .center)
 
             RoundedRectangle(cornerRadius: 2)
@@ -174,7 +174,7 @@ struct FullDriverRow: View {
             VStack(alignment: .trailing, spacing: 1) {
                 Text("\(entry.points) PTS")
                     .font(.f1Digits(15))
-                    .foregroundStyle(entry.position == "1" ? Theme.f1Red : .white)
+                    .foregroundStyle(entry.position == "1" ? Theme.accent : .white)
                 HStack(spacing: 6) {
                     if let wins = Int(entry.wins), wins > 0 {
                         Text("\(wins)W")
@@ -208,7 +208,7 @@ struct FullConstructorRow: View {
         HStack(spacing: 12) {
             Text(entry.position)
                 .font(.f1Digits(18))
-                .foregroundStyle(entry.position == "1" ? Theme.f1Red : .white)
+                .foregroundStyle(entry.position == "1" ? Theme.accent : .white)
                 .frame(width: 30, alignment: .center)
 
             RoundedRectangle(cornerRadius: 2)
@@ -224,7 +224,7 @@ struct FullConstructorRow: View {
             VStack(alignment: .trailing, spacing: 1) {
                 Text("\(entry.points) PTS")
                     .font(.f1Digits(15))
-                    .foregroundStyle(entry.position == "1" ? Theme.f1Red : .white)
+                    .foregroundStyle(entry.position == "1" ? Theme.accent : .white)
                 HStack(spacing: 6) {
                     if let wins = Int(entry.wins), wins > 0 {
                         Text("\(wins)W")

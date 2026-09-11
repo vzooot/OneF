@@ -56,6 +56,7 @@ struct ContentView: View {
 
                     if let map = model.trackMap {
                         TrackSectionView(map: map, circuit: race.circuit)
+                            .id("trackSection")
                     }
                 } else {
                     SeasonOverBanner()

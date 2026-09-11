@@ -41,18 +41,29 @@ enum TrackAPI {
         "ricard": 28,
     ]
 
-    /// Fetches the track map for an Ergast circuitId, or nil when the circuit
-    /// has no map data. The API falls back to the nearest available year.
+    /// Fetches the track map for an Ergast circuitId, falling back to a
+    /// bundled OpenStreetMap-derived centerline for circuits MultiViewer
+    /// doesn't cover (e.g. Madring).
     static func trackMap(circuitId: String, season: String) async throws -> TrackMap? {
-        guard let key = circuitKeys[circuitId] else { return nil }
-        let url = URL(string: "https://api.multiviewer.app/api/v1/circuits/\(key)/\(season)")!
-        var request = URLRequest(url: url)
-        request.timeoutInterval = 15
+        if let key = circuitKeys[circuitId] {
+            let url = URL(string: "https://api.multiviewer.app/api/v1/circuits/\(key)/\(season)")!
+            var request = URLRequest(url: url)
+            request.timeoutInterval = 15
 
-        let (data, response) = try await URLSession.shared.data(for: request)
-        guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
-            return nil
+            if let (data, response) = try? await URLSession.shared.data(for: request),
+               let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode),
+               let map = try? JSONDecoder().decode(TrackMap.self, from: data) {
+                return map
+            }
         }
-        return try JSONDecoder().decode(TrackMap.self, from: data)
+        return bundledMap(circuitId: circuitId)
+    }
+
+    /// Ships-with-the-app geometry (Resources/<circuitId>.json), traced from
+    /// OpenStreetMap. © OpenStreetMap contributors.
+    private static func bundledMap(circuitId: String) -> TrackMap? {
+        guard let url = Bundle.main.url(forResource: circuitId, withExtension: "json"),
+              let data = try? Data(contentsOf: url) else { return nil }
+        return try? JSONDecoder().decode(TrackMap.self, from: data)
     }
 }

@@ -51,6 +51,11 @@ struct AboutView: View {
                                     url: "https://multiviewer.app"
                                 )
                                 attribution(
+                                    name: "OpenStreetMap",
+                                    detail: "Circuit geometry for some tracks. Map data © OpenStreetMap contributors, licensed under ODbL.",
+                                    url: "https://www.openstreetmap.org/copyright"
+                                )
+                                attribution(
                                     name: "Formula1.com · BBC Sport · Motorsport.com",
                                     detail: "News headlines via public RSS feeds. All articles remain the property of their publishers; stories open at the original source.",
                                     url: nil

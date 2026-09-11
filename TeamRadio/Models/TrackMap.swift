@@ -21,11 +21,20 @@ struct TrackMap: Decodable {
 
     let x: [Double]
     let y: [Double]
+    /// Optional per-point elevation in decimeters above the track's lowest
+    /// point (bundled OSM circuits only; MultiViewer serves none).
+    let z: [Double]?
     let corners: [Corner]
     let rotation: Double?
     let pitLoss: PitLoss?
     let circuitName: String?
     let year: Int?
+
+    /// Total elevation spread in meters, when height data exists.
+    var elevationGainM: Double? {
+        guard let z, let top = z.max(), top > 20 else { return nil }
+        return top / 10
+    }
 
     /// Track length computed from the centerline polyline (decimeters → km).
     var lengthKm: Double {

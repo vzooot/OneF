@@ -54,6 +54,9 @@ struct TrackSectionView: View {
                     if let pitLoss = map.pitLossSeconds {
                         statChip(String(format: "%.0fS", pitLoss), "PIT LOSS")
                     }
+                    if let gain = map.elevationGainM {
+                        statChip(String(format: "%.0F M", gain), "ELEVATION")
+                    }
                 }
                 .padding(.horizontal, 14)
                 .padding(.bottom, 14)

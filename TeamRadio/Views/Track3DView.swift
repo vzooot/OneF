@@ -72,21 +72,34 @@ enum TrackSceneBuilder {
         underlay.position.z = -0.03
         flat.addChildNode(underlay)
 
-        // Glowing racing line, floating just above the asphalt.
-        let glow = SCNMaterial()
-        glow.lightingModel = .constant
-        glow.diffuse.contents = UIColor(red: 0.882, green: 0.024, blue: 0, alpha: 1)
-        glow.emission.contents = UIColor(red: 1.0, green: 0.15, blue: 0.1, alpha: 1)
-        glow.isDoubleSided = true
-        let line = SCNNode(geometry: ribbonGeometry(points: points, halfWidth: 0.05, material: glow))
-        line.position.z = 0.02
-        flat.addChildNode(line)
+        // Glowing racing line in the three timing-sector colors.
+        let sectorColors: [(UIColor, UIColor)] = [
+            (UIColor(red: 0, green: 0.91, blue: 0.99, alpha: 1),
+             UIColor(red: 0.3, green: 0.95, blue: 1.0, alpha: 1)),          // S1 cyan
+            (UIColor(white: 0.95, alpha: 1), UIColor(white: 0.85, alpha: 1)), // S2 white
+            (UIColor(red: 0.994, green: 0.297, blue: 0.16, alpha: 1),
+             UIColor(red: 1.0, green: 0.4, blue: 0.25, alpha: 1)),          // S3 red
+        ]
+        let third = points.count / 3
+        for s in 0..<3 {
+            let end = s == 2 ? points.count - 1 : (s + 1) * third
+            var arc = Array(points[(s * third)...min(end, points.count - 1)])
+            if s == 2 { arc.append(points[0]) }  // close the lap
+            let glow = SCNMaterial()
+            glow.lightingModel = .constant
+            glow.diffuse.contents = sectorColors[s].0
+            glow.emission.contents = sectorColors[s].1
+            glow.isDoubleSided = true
+            let line = SCNNode(geometry: ribbonGeometry(points: arc, halfWidth: 0.05, material: glow, closed: false))
+            line.position.z = 0.02
+            flat.addChildNode(line)
+        }
 
         // Start/finish gate at the first centerline point.
         let gate = SCNNode(geometry: SCNBox(width: 0.55, height: 0.07, length: 0.16, chamferRadius: 0.01))
         gate.geometry?.firstMaterial?.diffuse.contents = UIColor.white
         gate.geometry?.firstMaterial?.emission.contents = UIColor(white: 0.7, alpha: 1)
-        gate.position = SCNVector3(points[0].x, points[0].y, 0.06)
+        gate.position = SCNVector3(points[0].x, points[0].y, points[0].h + 0.06)
         let next = points[1]
         gate.eulerAngles.z = Float(atan2(next.y - points[0].y, next.x - points[0].x)) + .pi / 2
         flat.addChildNode(gate)
@@ -94,6 +107,7 @@ enum TrackSceneBuilder {
         // Corner number markers.
         for corner in map.corners {
             let p = normalize(corner.trackPosition.x, corner.trackPosition.y, map: map)
+            let h = points.min(by: { hypot($0.x - p.x, $0.y - p.y) < hypot($1.x - p.x, $1.y - p.y) })?.h ?? 0
             let text = SCNText(string: "\(corner.number)", extrusionDepth: 0.4)
             text.font = UIFont.systemFont(ofSize: 5, weight: .heavy)
             text.flatness = 0.2
@@ -105,10 +119,31 @@ enum TrackSceneBuilder {
             // Center the glyph on the corner position, lifted off the track.
             let (minB, maxB) = text.boundingBox
             node.pivot = SCNMatrix4MakeTranslation((maxB.x + minB.x) / 2, (maxB.y + minB.y) / 2, 0)
-            node.position = SCNVector3(p.x, p.y, 0.4)
+            node.position = SCNVector3(p.x, p.y, h + 0.4)
             node.constraints = [SCNBillboardConstraint()]
             flat.addChildNode(node)
         }
+
+        // Ghost car: a glowing marble lapping the circuit at constant speed.
+        let car = SCNNode(geometry: SCNSphere(radius: 0.085))
+        car.geometry?.firstMaterial?.lightingModel = .constant
+        car.geometry?.firstMaterial?.diffuse.contents = UIColor.white
+        car.geometry?.firstMaterial?.emission.contents = UIColor(red: 0.55, green: 0.97, blue: 1.0, alpha: 1)
+        let path = stride(from: 0, to: points.count, by: 2).map { points[$0] } + [points[0]]
+        var lapLength: Float = 0
+        for i in 1..<path.count {
+            lapLength += hypot(path[i].x - path[i - 1].x, path[i].y - path[i - 1].y)
+        }
+        let lapSeconds: Float = 24
+        var moves: [SCNAction] = []
+        for i in 1..<path.count {
+            let seg = hypot(path[i].x - path[i - 1].x, path[i].y - path[i - 1].y)
+            moves.append(.move(to: SCNVector3(path[i].x, path[i].y, path[i].h + 0.09),
+                               duration: Double(seg / lapLength * lapSeconds)))
+        }
+        car.position = SCNVector3(path[0].x, path[0].y, path[0].h + 0.09)
+        car.runAction(.repeatForever(.sequence(moves)))
+        flat.addChildNode(car)
 
         // Slow orbit; user gestures move the camera independently.
         spinner.runAction(.repeatForever(.rotateBy(x: 0, y: 2 * .pi, z: 0, duration: 45)))
@@ -158,33 +193,47 @@ enum TrackSceneBuilder {
         return (Float((x - b.cx) * b.scale), Float((y - b.cy) * b.scale))
     }
 
-    private static func normalizedPoints(map: TrackMap) -> [(x: Float, y: Float)] {
+    /// Elevation is exaggerated so 20–30 m of real grade reads clearly at
+    /// map scale instead of vanishing.
+    private static func normalizedPoints(map: TrackMap) -> [(x: Float, y: Float, h: Float)] {
         guard map.x.count == map.y.count else { return [] }
-        return zip(map.x, map.y).map { normalize($0, $1, map: map) }
+        let b = bounds(map: map)
+        let heights: [Float]
+        if let z = map.z, z.count == map.x.count {
+            heights = z.map { Float($0 * b.scale * 2.4) }
+        } else {
+            heights = [Float](repeating: 0, count: map.x.count)
+        }
+        return zip(zip(map.x, map.y), heights).map { pair, h in
+            let p = normalize(pair.0, pair.1, map: map)
+            return (p.x, p.y, h)
+        }
     }
 
-    /// Builds the track ribbon as an explicit closed triangle strip between
-    /// the centerline offset left and right — no triangulation involved, so
-    /// it can never accidentally fill the infield.
+    /// Builds the track ribbon as an explicit triangle strip between the
+    /// centerline offset left and right — no triangulation involved, so it
+    /// can never accidentally fill the infield. Follows per-point elevation.
     private static func ribbonGeometry(
-        points: [(x: Float, y: Float)], halfWidth: Float, material: SCNMaterial
+        points: [(x: Float, y: Float, h: Float)], halfWidth: Float,
+        material: SCNMaterial, closed: Bool = true
     ) -> SCNGeometry {
         let n = points.count
         var vertices: [SCNVector3] = []
         vertices.reserveCapacity(2 * (n + 1))
 
-        for i in 0...n {
+        let last = closed ? n : n - 1
+        for i in 0...last {
             let index = i % n
-            let prev = points[(index - 1 + n) % n]
-            let next = points[(index + 1) % n]
+            let prev = points[closed ? (index - 1 + n) % n : max(index - 1, 0)]
+            let next = points[closed ? (index + 1) % n : min(index + 1, n - 1)]
             var dx = next.x - prev.x
             var dy = next.y - prev.y
             let len = max(sqrt(dx * dx + dy * dy), 0.0001)
             dx /= len
             dy /= len
             let p = points[index]
-            vertices.append(SCNVector3(p.x - dy * halfWidth, p.y + dx * halfWidth, 0))
-            vertices.append(SCNVector3(p.x + dy * halfWidth, p.y - dx * halfWidth, 0))
+            vertices.append(SCNVector3(p.x - dy * halfWidth, p.y + dx * halfWidth, p.h))
+            vertices.append(SCNVector3(p.x + dy * halfWidth, p.y - dx * halfWidth, p.h))
         }
 
         let normals = [SCNVector3](repeating: SCNVector3(0, 0, 1), count: vertices.count)

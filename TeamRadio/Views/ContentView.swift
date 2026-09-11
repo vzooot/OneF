@@ -39,6 +39,9 @@ struct ContentView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
                 HeaderView(onInfo: { showAbout = true })
+                    // The banner art carries its own feathered margin — pull
+                    // the next card up so the gap reads as one clean beat.
+                    .padding(.bottom, -12)
 
                 if let race = model.nextRace {
                     LiveSessionBanner(race: race)
@@ -82,33 +85,26 @@ struct HeaderView: View {
     var onInfo: (() -> Void)? = nil
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            HStack(spacing: 10) {
-                Image("HeaderLogo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 58)
-                    // Screen blend melts the banner's black ground into the
-                    // page gradient, leaving only the glowing artwork.
-                    .blendMode(.screen)
-                    .accessibilityLabel("Team Radio")
+        HStack(spacing: 10) {
+            Image("HeaderLogo")
+                .resizable()
+                .scaledToFit()
+                .frame(height: 66)
+                // Screen blend melts the banner's black ground into the
+                // page gradient, leaving only the glowing artwork.
+                .blendMode(.screen)
+                .accessibilityLabel("Team Radio")
 
-                Spacer()
+            Spacer()
 
-                if let onInfo {
-                    Button(action: onInfo) {
-                        Image(systemName: "info.circle")
-                            .font(.system(size: 20))
-                            .foregroundStyle(Theme.dimText)
-                    }
-                    .buttonStyle(.plain)
+            if let onInfo {
+                Button(action: onInfo) {
+                    Image(systemName: "info.circle")
+                        .font(.system(size: 20))
+                        .foregroundStyle(Theme.dimText)
                 }
+                .buttonStyle(.plain)
             }
-            Text("NEXT RACE COUNTDOWN")
-                .font(.f1(13, weight: .semibold))
-                .tracking(4)
-                .foregroundStyle(Theme.dimText)
-                .padding(.leading, 8)
         }
         .padding(.top, 4)
     }

@@ -63,7 +63,7 @@ struct CountdownView: View {
                     pinButton(session: session)
                 }
             }
-            .onAppear { pinned = LiveActivityManager.isActive }
+            .onAppear { pinned = LiveActivityManager.hasPinIntent }
             .padding(18)
             .background(
                 RoundedRectangle(cornerRadius: 20)
@@ -82,7 +82,7 @@ struct CountdownView: View {
     private func pinButton(session: WeekendSession) -> some View {
         Button {
             if pinned {
-                LiveActivityManager.endAll()
+                LiveActivityManager.unpin()
                 pinned = false
             } else {
                 LiveActivityManager.start(race: race, session: session)

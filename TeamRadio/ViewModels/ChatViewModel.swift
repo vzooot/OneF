@@ -86,6 +86,10 @@ final class ChatViewModel {
             messages = (fetched + kept)
                 .filter { !blocked.contains($0.senderId) }
                 .sorted { $0.date < $1.date }
+            // Having the room open counts as catching up — keeps the tab badge quiet.
+            if let newest = messages.last?.date, newest > ChatBadge.lastReadAt {
+                ChatBadge.lastReadAt = newest
+            }
             errorText = nil
         } catch is CancellationError {
             // A poll interrupted by navigation — not worth reporting.

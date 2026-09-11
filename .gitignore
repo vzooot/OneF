@@ -17,3 +17,4 @@ fastlane/asc_key.json
 fastlane/AuthKey_*.p8
 fastlane/report.xml
 fastlane/README.md
+.wrangler/

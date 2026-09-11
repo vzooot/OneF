@@ -248,6 +248,8 @@ struct ChatView: View {
                         ForEach(model.messages) { message in
                             ChatBubble(message: message, isMine: model.isMine(message))
                                 .id(message.id)
+                                // New arrivals spring in from the bottom edge.
+                                .transition(.move(edge: .bottom).combined(with: .opacity))
                                 .contextMenu {
                                     if !model.isMine(message) {
                                         Button(role: .destructive) {
@@ -266,6 +268,7 @@ struct ChatView: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.bottom, 8)
+                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: model.messages)
                 }
                 .scrollDismissesKeyboard(.interactively)
                 .onTapGesture { draftFocused = false }
